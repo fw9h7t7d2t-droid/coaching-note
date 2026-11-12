@@ -1,5 +1,5 @@
 // オフライン対応：アプリ本体は先に保存、フォントは初回表示時に保存
-const VERSION = "v1";
+const VERSION = "v2";
 const CACHE = "coaching-note-" + VERSION;
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 

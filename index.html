@@ -85,6 +85,11 @@ h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--li
 .thumb .hint{position:absolute;right:10px;bottom:10px;background:rgba(6,13,9,.75);color:var(--lime);font-size:12px;font-weight:700;padding:5px 10px;border-radius:99px;border:1px solid rgba(198,255,61,.35)}
 .total{position:sticky;bottom:calc(env(safe-area-inset-bottom) + 10px);background:linear-gradient(90deg,var(--lime),#7dff6a);color:#0b1a07;border-radius:14px;padding:11px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.45)}
 .total #tot{font-family:Oswald,sans-serif;font-size:22px}
+.ttl2{font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dot{width:9px;height:9px;border-radius:50%;background:#55695c;display:inline-block}
+.dot.on{background:var(--lime);box-shadow:0 0 10px var(--lime)}
+.codebox{font-family:Oswald,monospace;font-size:26px;letter-spacing:.12em;text-align:center;color:var(--lime);background:rgba(0,0,0,.3);border:1px dashed rgba(198,255,61,.4);border-radius:12px;padding:12px;margin:10px 0}
+#cloudCard .meta{line-height:1.6;margin:0 0 10px}
 .empty{color:var(--sub);text-align:center;padding:26px 10px;line-height:1.8}
 /* board */
 #board{position:fixed;inset:0;z-index:20;background:radial-gradient(700px 500px at 50% 0%,#14402a,#07140d 70%);display:none;flex-direction:column}
@@ -138,7 +143,105 @@ let S={plans:[]};
 let storageOK=true;
 function load(){try{const s=localStorage.getItem(KEY);if(s)S=JSON.parse(s);}catch(e){storageOK=false}}
 let saveT;
-function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){storageOK=false}},250)}
+function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){storageOK=false}}
+function save(){clearTimeout(saveT);saveT=setTimeout(()=>{saveLocal();if(cur&&S.plans.includes(cur))cloudPut(cur)},400)}
+
+/* ---------- クラウド保存（Firebase：試合分析ノートと同じチームコードで使える） ---------- */
+const FIREBASE_CONFIG={
+  apiKey:"AIzaSyCXeZ4D0Sm8yHtxWfdaUj2ak1QpXJ1-4iQ",
+  authDomain:"match-note-7ee12.firebaseapp.com",
+  projectId:"match-note-7ee12",
+  storageBucket:"match-note-7ee12.firebasestorage.app",
+  messagingSenderId:"782307080797",
+  appId:"1:782307080797:web:fe4bf711bcf8893e4babb4"
+};
+const FB_VER="10.12.2";
+const lsGet=(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const cloud={ready:false,err:null,db:null,team:lsGet('cn_team',null),teamName:'',unsub:[],synced:false};
+const loadScript=src=>new Promise((res,rej)=>{const el=document.createElement('script');el.src=src;el.onload=res;el.onerror=rej;document.head.appendChild(el)});
+const fmtCode=c=>c?c.replace(/(.{4})(?=.)/g,'$1-'):'';
+const normCode=c=>(c||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+function newCode(){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',a=new Uint32Array(12);crypto.getRandomValues(a);return[...a].map(x=>A[x%A.length]).join('')}
+const teamRef=()=>cloud.db.collection('teams').doc(cloud.team);
+const plansRef=()=>teamRef().collection('plans');
+function cloudFail(e,what){console.log(e);toast(e&&e.code==='permission-denied'?what+'できませんでした（クラウドの権限設定が必要です）':what+'できませんでした（電波を確認してください）')}
+async function cloudInit(){
+  try{
+    const base=`https://www.gstatic.com/firebasejs/${FB_VER}/`;
+    await loadScript(base+'firebase-app-compat.js');
+    await Promise.all([loadScript(base+'firebase-auth-compat.js'),loadScript(base+'firebase-firestore-compat.js')]);
+    firebase.initializeApp(FIREBASE_CONFIG);
+    cloud.db=firebase.firestore();
+    try{await cloud.db.enablePersistence({synchronizeTabs:true})}catch(_){}
+    await firebase.auth().signInAnonymously();
+    cloud.ready=true;cloud.err=null;
+    if(cloud.team)cloudAttach();
+  }catch(e){cloud.err='クラウドに接続できませんでした（電波を確認してください）';console.log(e)}
+  renderCloudCard();
+}
+function cloudDetach(){cloud.unsub.forEach(f=>f());cloud.unsub=[];cloud.synced=false}
+function cloudAttach(){
+  cloudDetach();
+  cloud.unsub.push(teamRef().onSnapshot(d=>{if(d.exists){cloud.teamName=d.data().name||'';renderCloudCard()}},e=>{cloud.err='チームのデータを読めませんでした';renderCloudCard()}));
+  cloud.unsub.push(plansRef().onSnapshot(q=>{
+    const list=[];
+    q.forEach(d=>{try{const p=JSON.parse(d.data().json);if(p&&p.id&&p.blocks)list.push(p)}catch(_){}});
+    // 編集中の指導案は手元の内容を優先（入力中に書き換わらないように）
+    const out=list.map(p=>cur&&p.id===cur.id&&isEditing()?cur:p);
+    if(cur&&isEditing()&&!out.includes(cur))out.push(cur);
+    S.plans=out;cloud.synced=true;saveLocal();
+    if(!isEditing()&&!document.getElementById('board').classList.contains('open'))renderList();
+  },e=>{cloud.err=e&&e.code==='permission-denied'?'クラウドの権限設定が必要です':'指導案を読み込めませんでした';renderCloudCard()}));
+}
+function isEditing(){return location.hash==='#plan'}
+function planDoc(p){return{json:JSON.stringify(p),title:p.title||'',date:p.date||'',format:p.format,updatedAt:Date.now()}}
+function cloudPut(p){if(!cloud.ready||!cloud.team||!p)return;plansRef().doc(p.id).set(planDoc(p)).catch(e=>cloudFail(e,'クラウドに保存'))}
+function cloudDel(id){if(!cloud.ready||!cloud.team)return;plansRef().doc(id).delete().catch(()=>{})}
+async function pushLocalMissing(){
+  const q=await plansRef().get(),have=new Set(q.docs.map(x=>x.id));
+  await Promise.all(S.plans.filter(p=>!have.has(p.id)).map(p=>plansRef().doc(p.id).set(planDoc(p))));
+}
+async function cloudCreate(name){
+  const code=newCode();
+  await cloud.db.collection('teams').doc(code).set({name:name||'マイクラブ',createdAt:Date.now(),updatedAt:Date.now()});
+  cloud.team=code;lsSet('cn_team',code);
+  await pushLocalMissing();cloudAttach();
+}
+async function cloudJoin(raw){
+  const code=normCode(raw);
+  if(code.length!==12)throw new Error('len');
+  const d=await cloud.db.collection('teams').doc(code).get();
+  if(!d.exists)throw new Error('none');
+  cloud.team=code;lsSet('cn_team',code);
+  await pushLocalMissing();cloudAttach();
+}
+function renderCloudCard(){
+  const el=document.getElementById('cloudCard');if(!el)return;
+  const head=(on,extra='')=>`<div class="ttl2"><span class="dot ${on?'on':''}"></span>クラウド保存・チーム共有${extra}</div>`;
+  if(cloud.err&&!cloud.ready){el.innerHTML=head(false)+`<p class="meta" style="color:#ff7a7a">${esc(cloud.err)}</p><button class="btn sm" id="cRetry">もう一度つなぐ</button>`;
+    document.getElementById('cRetry').onclick=()=>{cloud.err=null;renderCloudCard();cloudInit()};return}
+  if(!cloud.ready){el.innerHTML=head(false)+`<p class="meta">クラウドに接続中…</p>`;return}
+  if(cloud.team){
+    el.innerHTML=head(true,cloud.teamName?` <span class="badge">${esc(cloud.teamName)}</span>`:'')+
+      `<p class="meta">指導案は自動でクラウドに保存されます。${cloud.err?'<br><b style="color:#ff7a7a">'+esc(cloud.err)+'</b>':''}<br>他のコーチや新しいスマホでは、このチームコードで「参加」してください。</p>
+      <div class="codebox">${fmtCode(cloud.team)}</div>
+      <div class="row"><button class="btn sm" id="cCopy">コードをコピー</button><button class="btn sm" id="cLeave">この端末で共有をやめる</button></div>
+      <p class="meta" style="font-size:12px;margin-top:10px">チームコードはパスワードと同じです。チームのコーチ以外には教えないでください。</p>`;
+    document.getElementById('cCopy').onclick=()=>copyText(fmtCode(cloud.team),'チームコード');
+    document.getElementById('cLeave').onclick=()=>confirmDlg('この端末でチーム共有をやめますか？（この端末の指導案は残ります）',()=>{cloudDetach();cloud.team=null;lsSet('cn_team',null);renderCloudCard();toast('共有をやめました')},'やめる');
+    return;
+  }
+  el.innerHTML=head(false)+`<p class="meta">はじめての人は「チームを作る」。他のコーチが作ったチームに入るとき・機種変更したときは、チームコードを入れて「参加」。<b>試合分析ノートのチームコードもそのまま使えます。</b></p>
+    <div class="row" style="margin-bottom:8px"><input id="cName" class="grow" style="width:auto" placeholder="チーム名（例：U-12）"><button class="btn sm pri" id="cCreate">チームを作る</button></div>
+    <div class="row"><input id="cCode" class="grow" style="width:auto" placeholder="XXXX-XXXX-XXXX" autocapitalize="characters"><button class="btn sm" id="cJoin">参加</button></div>
+    <p class="meta" style="font-size:12px;margin-top:10px">この端末にある指導案は、チームに足し合わせます（消えません）。</p>`;
+  document.getElementById('cCreate').onclick=async e=>{e.target.disabled=true;try{await cloudCreate(document.getElementById('cName').value.trim());toast('チームを作りました')}catch(err){cloudFail(err,'チームを作成');e.target.disabled=false}renderCloudCard()};
+  document.getElementById('cJoin').onclick=async e=>{e.target.disabled=true;
+    try{await cloudJoin(document.getElementById('cCode').value);toast('チームに参加しました')}
+    catch(err){if(err.message==='len')toast('コードは12文字です');else if(err.message==='none')toast('そのチームコードは見つかりません');else cloudFail(err,'参加');e.target.disabled=false}
+    renderCloudCard()};
+}
 const uid=()=>Math.random().toString(36).slice(2,9);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
@@ -434,7 +537,7 @@ function libDialog(bi){
 /* ---------- 一覧 ---------- */
 const app=document.getElementById('app');
 function header(title,back){document.getElementById('htitle').textContent=title;document.getElementById('backBtn').style.display=back?'':'none'}
-document.getElementById('backBtn').onclick=()=>{location.hash='';renderList()};
+document.getElementById('backBtn').onclick=()=>{clearTimeout(saveT);saveLocal();if(cur&&S.plans.includes(cur))cloudPut(cur);location.hash='';renderList()};
 function totalMin(p){return p.blocks.reduce((a,b)=>a+(+b.min||0),0)}
 
 function renderList(){
@@ -453,7 +556,8 @@ function renderList(){
       <b>${esc(p.title||'（無題の指導案）')}</b>
       <span class="meta">${p.theme?'テーマ：'+esc(p.theme)+'　':''}${totalMin(p)}分・${p.blocks.length}メニュー</span></button>`;
   }
-  h+=`<h2>データ</h2><div class="card"><div class="meta" style="margin-bottom:10px;line-height:1.6">指導案はこの端末のブラウザに保存されます。機種変更や他の端末に移すときは、バックアップの文字列をコピーして、移した先で読み込んでください。${storageOK?'':'<br><b style="color:#c62828">この環境では保存が使えないため、ページを閉じると消えます。</b>'}</div>
+  h+=`<h2>クラウド</h2><div class="card" id="cloudCard"></div>
+  <h2>データ</h2><div class="card"><div class="meta" style="margin-bottom:10px;line-height:1.6">チーム共有をしていないときは、指導案はこの端末のブラウザだけに保存されます。クラウドを使わずに移すときは、バックアップの文字列をコピーして、移した先で読み込んでください。${storageOK?'':'<br><b style="color:#c62828">この環境では保存が使えないため、ページを閉じると消えます。</b>'}</div>
     <div class="row"><button class="btn sm" id="exp">バックアップをコピー</button><button class="btn sm" id="imp">バックアップを読み込む</button></div></div>`;
   app.innerHTML=h;
   app.querySelectorAll('[data-new]').forEach(b=>b.onclick=()=>{const p=newPlan(b.dataset.new);S.plans.push(p);save();openPlan(p.id)});
@@ -462,6 +566,7 @@ function renderList(){
   document.getElementById('propose').onclick=proposeDialog;
   document.getElementById('exp').onclick=()=>copyText(JSON.stringify(S),'バックアップ');
   document.getElementById('imp').onclick=importDialog;
+  renderCloudCard();
   window.scrollTo(0,0);
 }
 function openPlan(id){location.hash='plan';renderEdit(id)}
@@ -517,7 +622,7 @@ function renderEdit(id){
   document.getElementById('addb').onclick=()=>{p.blocks.push(blk('トレーニング',15,'grid',20,20));save();renderEdit(p.id);setTimeout(()=>window.scrollTo(0,document.body.scrollHeight),50)};
   document.getElementById('share').onclick=()=>copyText(planText(p),'指導案');
   document.getElementById('dupPlan').onclick=()=>{const c=JSON.parse(JSON.stringify(p));c.id=uid();c.title=(c.title||'指導案')+'（コピー）';c.date=today();c.review='';S.plans.push(c);save();renderEdit(c.id);window.scrollTo(0,0);toast('複製しました')};
-  document.getElementById('delPlan').onclick=()=>confirmDlg('この指導案を削除しますか？',()=>{S.plans=S.plans.filter(x=>x.id!==p.id);save();location.hash='';renderList()});
+  document.getElementById('delPlan').onclick=()=>confirmDlg('この指導案を削除しますか？',()=>{S.plans=S.plans.filter(x=>x.id!==p.id);cloudDel(p.id);cur=null;saveLocal();location.hash='';renderList()});
 }
 function switchFormat(p,f){
   const A=PITCH[p.format],B=PITCH[f],sx=B.W/A.W,sy=B.L/A.L;
@@ -624,7 +729,7 @@ window.addEventListener('resize',()=>{if(BD.i>=0&&document.getElementById('board
 
 /* ---------- ダイアログ類 ---------- */
 function modal(html){const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="box">${html}</div>`;m.onclick=e=>{if(e.target===m)m.remove()};document.body.appendChild(m);return m}
-function confirmDlg(msg,ok){const m=modal(`<p>${esc(msg)}</p><div class="row" style="justify-content:flex-end"><button class="btn" data-c>キャンセル</button><button class="btn pri" data-o style="background:#c62828;border-color:#c62828">削除する</button></div>`);
+function confirmDlg(msg,ok,okLabel){const m=modal(`<p>${esc(msg)}</p><div class="row" style="justify-content:flex-end"><button class="btn" data-c>キャンセル</button><button class="btn pri" data-o style="background:#c62828;border-color:#c62828">${okLabel||'削除する'}</button></div>`);
   m.querySelector('[data-c]').onclick=()=>m.remove();m.querySelector('[data-o]').onclick=()=>{m.remove();ok()}}
 function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
 async function copyText(text,what){
@@ -637,7 +742,7 @@ function importDialog(){
   m.querySelector('[data-c]').onclick=()=>m.remove();
   m.querySelector('[data-o]').onclick=()=>{
     try{const d=JSON.parse(m.querySelector('textarea').value);if(!Array.isArray(d.plans))throw 0;
-      for(const p of d.plans){if(!p.id||!p.blocks||!PITCH[p.format])continue;S.plans=S.plans.filter(x=>x.id!==p.id);S.plans.push(p)}
+      for(const p of d.plans){if(!p.id||!p.blocks||!PITCH[p.format])continue;S.plans=S.plans.filter(x=>x.id!==p.id);S.plans.push(p);cloudPut(p)}
       save();m.remove();renderList();toast(d.plans.length+'件読み込みました');}
     catch(e){toast('読み込めませんでした。文字列を確認してください')}
   };
@@ -645,6 +750,7 @@ function importDialog(){
 
 /* ---------- 起動 ---------- */
 load();
+cloudInit();
 window.addEventListener('hashchange',()=>{if(!location.hash){document.getElementById('board').classList.remove('open');renderList()}});
 renderList();
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
