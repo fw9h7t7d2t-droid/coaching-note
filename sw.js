@@ -1,5 +1,5 @@
 // オフライン対応：アプリ本体は先に保存、フォントは初回表示時に保存
-const VERSION = "v2";
+const VERSION = "v3";
 const CACHE = "coaching-note-" + VERSION;
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 
@@ -15,7 +15,7 @@ self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
   // アプリ本体：ネット優先（更新を反映）→ 圏外なら保存版
   if (url.origin === location.origin) {
-    e.respondWith(fetch(e.request).then(res => { const cp = res.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); return res; })
+    e.respondWith(fetch(e.request.url, {cache: "no-cache"}).then(res => { const cp = res.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); return res; })
       .catch(() => caches.match(e.request).then(r => r || caches.match("./index.html"))));
     return;
   }
