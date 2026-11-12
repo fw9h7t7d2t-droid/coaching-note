@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>サッカー指導案ノート</title>
+<meta name="theme-color" content="#060d09">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="指導案">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060d09; --card:rgba(18,32,24,.78); --card2:#0d1912; --ink:#eaf4ec; --sub:#8da596; --line:rgba(198,255,61,.12); --line2:#22362a;
+  --lime:#c6ff3d; --lime2:#a6e21a; --orange:#ff8a3d; --green:#1f7a45; --red:#ff4b4b; --blue:#3d8bff;
+}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;color:var(--ink);font-family:"Noto Sans JP",system-ui,sans-serif;font-size:15px;-webkit-text-size-adjust:100%;min-height:100vh;
+  background:
+   radial-gradient(900px 520px at 100% -8%,rgba(198,255,61,.16),transparent 60%),
+   radial-gradient(700px 600px at -20% 40%,rgba(0,170,100,.16),transparent 60%),
+   repeating-linear-gradient(180deg,rgba(255,255,255,.018) 0 64px,transparent 64px 128px),
+   var(--bg);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.07;z-index:0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 600' fill='none' stroke='%23fff' stroke-width='2'%3E%3Crect x='20' y='20' width='360' height='560'/%3E%3Cline x1='20' y1='300' x2='380' y2='300'/%3E%3Ccircle cx='200' cy='300' r='60'/%3E%3Crect x='100' y='20' width='200' height='90'/%3E%3Crect x='100' y='490' width='200' height='90'/%3E%3C/svg%3E") center/min(110vw,620px) no-repeat}
+header,main{position:relative;z-index:1}
+header{position:sticky;top:0;z-index:5;padding:calc(env(safe-area-inset-top) + 10px) 16px 10px;display:flex;align-items:center;gap:10px;
+  background:rgba(6,13,9,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--lime),#3ddc84);display:grid;place-items:center;flex:0 0 auto;box-shadow:0 0 18px rgba(198,255,61,.35)}
+header h1{font-size:16px;margin:0;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.02em}
+header button{background:rgba(255,255,255,.07);color:var(--ink);border:1px solid var(--line2);border-radius:9px;padding:7px 11px;font:inherit;font-size:14px}
+main{max-width:760px;margin:0 auto;padding:16px 16px calc(env(safe-area-inset-bottom) + 40px)}
+button{cursor:pointer;font-family:inherit}
+button:disabled{opacity:.35}
+.hero{padding:18px 4px 20px}
+.hero .en{font-family:Oswald,sans-serif;font-weight:700;font-size:44px;line-height:.95;letter-spacing:.02em;text-transform:uppercase;
+  background:linear-gradient(90deg,#fff 0%,#fff 45%,var(--lime) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .jp{margin-top:8px;color:var(--sub);font-size:13px;letter-spacing:.08em}
+.hero .stats{display:flex;gap:18px;margin-top:14px}
+.hero .stats div{font-family:Oswald,sans-serif;font-size:26px;color:var(--lime);line-height:1}
+.hero .stats span{display:block;font-family:"Noto Sans JP";font-size:11px;color:var(--sub);margin-top:4px}
+.btn{border:1px solid var(--line2);background:rgba(255,255,255,.05);color:var(--ink);border-radius:12px;padding:11px 14px;font-size:14px;font-weight:500;transition:transform .08s}
+.btn:active{transform:scale(.97)}
+.btn.pri{background:var(--lime);border-color:var(--lime);color:#0b1a07;font-weight:700;box-shadow:0 6px 22px rgba(198,255,61,.22)}
+.btn.or{background:var(--orange);border-color:var(--orange);color:#1e0d02;font-weight:700;box-shadow:0 6px 22px rgba(255,138,61,.22)}
+.btn.danger{color:#ff7a7a}
+.btn.sm{padding:6px 10px;font-size:13px;border-radius:9px}
+.btn.ghost{width:100%;margin-bottom:16px;border:1.5px dashed rgba(198,255,61,.55);color:var(--lime);font-weight:700;background:rgba(198,255,61,.06);padding:14px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.grow{flex:1}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.plan-item{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:14px 16px;margin-bottom:10px;font:inherit;color:inherit;position:relative;overflow:hidden}
+.plan-item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--lime)}
+.plan-item.e::before{background:var(--orange)}
+.plan-item b{font-size:16px;display:block;margin:5px 0 3px}
+.lib-item{display:flex;gap:12px;align-items:center;width:100%;text-align:left;border:1px solid var(--line);background:var(--card2);border-radius:14px;padding:8px;margin-bottom:8px;font:inherit;color:inherit}
+.lib-item .lt{flex:0 0 74px;height:74px;border-radius:10px;overflow:hidden;background:#1b6b38;display:flex;align-items:center;justify-content:center}
+.lib-item .lt svg{max-width:100%;max-height:100%}
+.lib-item b{display:block;font-size:14px;margin:3px 0 2px}
+.meta{color:var(--sub);font-size:13px}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;background:rgba(198,255,61,.14);color:var(--lime);letter-spacing:.04em}
+.badge.e{background:rgba(255,138,61,.16);color:var(--orange)}
+label.f{display:block;font-size:11px;color:var(--sub);margin:12px 0 5px;font-weight:700;letter-spacing:.08em}
+input,textarea,select{width:100%;font:inherit;font-size:15px;border:1px solid var(--line2);border-radius:11px;padding:10px 11px;background:rgba(0,0,0,.28);color:var(--ink);outline:none;color-scheme:dark}
+input:focus,textarea:focus,select:focus{border-color:var(--lime);box-shadow:0 0 0 3px rgba(198,255,61,.15)}
+input::placeholder,textarea::placeholder{color:#55695c}
+textarea{resize:vertical;min-height:64px;line-height:1.6}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:11px;overflow:hidden;background:rgba(0,0,0,.3);padding:3px;gap:3px}
+.seg button{border:0;background:none;padding:7px 14px;font-size:14px;font-weight:700;color:var(--sub);border-radius:8px}
+.seg button.on{background:var(--lime);color:#0b1a07}
+h2{font-family:Oswald,"Noto Sans JP",sans-serif;font-size:13px;margin:22px 4px 10px;color:var(--lime);font-weight:500;letter-spacing:.14em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
+h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.bnum{font-family:Oswald,sans-serif;font-size:22px;color:var(--lime);width:26px;text-align:center;flex:0 0 auto}
+.block-head{display:flex;gap:8px;align-items:center}
+.block-head input.name{font-weight:700}
+.block-head input.min{width:66px;text-align:right}
+.thumb{margin-top:12px;border-radius:14px;overflow:hidden;background:#1b6b38;cursor:pointer;position:relative;display:flex;justify-content:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08),0 10px 30px rgba(0,0,0,.35)}
+.thumb svg{display:block;max-height:240px;width:auto;max-width:100%}
+.thumb .hint{position:absolute;right:10px;bottom:10px;background:rgba(6,13,9,.75);color:var(--lime);font-size:12px;font-weight:700;padding:5px 10px;border-radius:99px;border:1px solid rgba(198,255,61,.35)}
+.total{position:sticky;bottom:calc(env(safe-area-inset-bottom) + 10px);background:linear-gradient(90deg,var(--lime),#7dff6a);color:#0b1a07;border-radius:14px;padding:11px 16px;display:flex;justify-content:space-between;align-items:center;margin-top:16px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.total #tot{font-family:Oswald,sans-serif;font-size:22px}
+.empty{color:var(--sub);text-align:center;padding:26px 10px;line-height:1.8}
+/* board */
+#board{position:fixed;inset:0;z-index:20;background:radial-gradient(700px 500px at 50% 0%,#14402a,#07140d 70%);display:none;flex-direction:column}
+#board.open{display:flex}
+.b-top{padding:calc(env(safe-area-inset-top) + 8px) 12px 8px;display:flex;gap:8px;align-items:center;color:#fff}
+.b-top .t{flex:1;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b-top button{background:var(--lime);color:#0b1a07;border:0;border-radius:10px;padding:8px 16px;font-weight:700;font-size:14px}
+.b-opts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:0 12px 8px;color:#cfe3d5;font-size:13px}
+.b-opts .seg button{padding:5px 10px;font-size:13px}
+.b-opts input,.b-opts select{width:auto;padding:5px 8px;font-size:13px}
+.b-opts input{width:56px}
+.b-stage{flex:1;min-height:0;display:flex;justify-content:center;align-items:center;padding:4px 8px}
+#bsvg{width:100%;height:100%;touch-action:none;user-select:none;-webkit-user-select:none;filter:drop-shadow(0 12px 30px rgba(0,0,0,.5))}
+.b-tools{background:rgba(4,10,7,.85);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:8px 8px calc(env(safe-area-inset-bottom) + 8px);display:flex;gap:6px;overflow-x:auto}
+.tool{flex:0 0 auto;min-width:56px;border:1px solid var(--line2);background:rgba(255,255,255,.04);color:#d9eadf;border-radius:12px;padding:6px 6px 5px;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.tool.on{background:var(--lime);color:#0b1a07;border-color:var(--lime);font-weight:700}
+.tool .ic{height:20px;display:flex;align-items:center;justify-content:center}
+.legend{color:#8fb39b;font-size:11px;padding:0 10px 6px;text-align:center}
+/* modal */
+.modal{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px}
+.modal .box{background:#0e1a13;border:1px solid var(--line);border-radius:20px;padding:18px;max-width:460px;width:100%;max-height:86vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.modal .box .ttl{font-size:18px;font-weight:700}
+.modal p{margin:0 0 14px;line-height:1.6}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 76px);transform:translateX(-50%);background:#0e1a13;border:1px solid rgba(198,255,61,.4);color:var(--ink);padding:10px 16px;border-radius:12px;font-size:14px;z-index:50;box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:90vw}
+</style>
+</head>
+<body>
+<header>
+  <button id="backBtn" style="display:none">‹ 一覧</button>
+  <div class="logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0b1a07" stroke-width="2.4"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="12" x2="21" y2="12"/><circle cx="12" cy="12" r="3.2"/></svg></div><h1 id="htitle">サッカー指導案ノート</h1>
+</header>
+<main id="app"></main>
+
+<div id="board">
+  <div class="b-top"><div class="t" id="btitle"></div><button id="bdone">完了</button></div>
+  <div class="b-opts" id="bopts"></div>
+  <div class="b-stage"><svg id="bsvg" preserveAspectRatio="xMidYMid meet"></svg></div>
+  <div class="legend">実線＝パス　破線＝ラン（人の動き）　波線＝ドリブル　／　置いた物はドラッグで移動</div>
+  <div class="b-tools" id="btools"></div>
+</div>
+
+<script>
+/* ---------- データ ---------- */
+const KEY='shidoan-v1';
+const PITCH={
+  '11':{W:68,L:105,PAw:40.32,PAd:16.5,GAw:18.32,GAd:5.5,PS:11,CR:9.15,G:7.32,arc:true,label:'11人制'},
+  '8': {W:50,L:68, PAw:29,   PAd:12,  GAw:13,   GAd:4,  PS:8, CR:7,   G:5,   arc:false,label:'8人制'}
+};
+const FORMS={'11':['4-4-2','4-3-3','3-5-2','4-2-3-1'],'8':['3-3-1','2-3-2','3-2-2','2-4-1']};
+let S={plans:[]};
+let storageOK=true;
+function load(){try{const s=localStorage.getItem(KEY);if(s)S=JSON.parse(s);}catch(e){storageOK=false}}
+let saveT;
+function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){storageOK=false}},250)}
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+
+function blk(name,min,area,gw,gh){return{id:uid(),name,min,desc:'',points:'',diagram:{area,gw:gw||20,gh:gh||20,items:[]}}}
+function newPlan(format){
+  return{id:uid(),title:'',date:today(),format,grade:'',count:'',theme:'',aim:'',review:'',
+    blocks:[blk('ウォーミングアップ',15,'grid',20,20),blk('トレーニング①',20,'grid',25,20),blk('トレーニング②',20,'half'),blk('ゲーム',25,'full'),blk('クールダウン',5,'grid',20,20)]};
+}
+function samplePlan(){
+  const p=newPlan('8');
+  Object.assign(p,{title:'1対1で仕掛ける',grade:'U-10（3〜4年）',count:'16人',theme:'ドリブル突破（1対1）',aim:'前を向いたら積極的に仕掛ける。相手の重心を見て、逆を取って抜け出す。'});
+  p.blocks[0].desc='ボールフィーリング → 2人1組でコーン間ドリブル（タッチ数を変えて）';
+  p.blocks[0].points='顔を上げる／足裏・インアウトを使い分ける';
+  p.blocks[0].diagram.items=[{t:'cone',x:4,y:4},{t:'cone',x:16,y:4},{t:'cone',x:4,y:16},{t:'cone',x:16,y:16},{t:'a',x:7,y:12,n:1},{t:'ball',x:8.2,y:10.8},{t:'drib',x1:7,y1:11,x2:13,y2:6}];
+  p.blocks[1].desc='1対1＋ミニゴール。攻撃はゴールを通過で1点。守備は奪ったら逆のミニゴールへ。';
+  p.blocks[1].points='スピードの変化／ボールを相手から遠い足に置く／抜いたら加速';
+  p.blocks[1].diagram.items=[{t:'mini',x:12.5,y:1.5},{t:'mini',x:12.5,y:18.5},{t:'cone',x:2,y:2},{t:'cone',x:23,y:2},{t:'cone',x:2,y:18},{t:'cone',x:23,y:18},{t:'a',x:12.5,y:15.5,n:1},{t:'ball',x:13.7,y:14.4},{t:'b',x:12.5,y:7,n:1},{t:'drib',x1:12.5,y1:14.5,x2:17,y2:6},{t:'run',x1:12.5,y1:8,x2:15,y2:10}];
+  p.blocks[2].desc='2対1→シュート（ハーフコート）';
+  p.blocks[2].points='数的優位で仕掛けるかパスかの判断';
+  p.blocks[2].diagram.items=[{t:'gk',x:25,y:2,n:'GK'},{t:'a',x:18,y:26,n:1},{t:'a',x:32,y:26,n:2},{t:'ball',x:19.2,y:24.8},{t:'b',x:25,y:16,n:1},{t:'drib',x1:18,y1:25,x2:21,y2:17},{t:'run',x1:32,y1:25,x2:32,y2:14}];
+  p.blocks[3].desc='8対8ゲーム。ドリブルでラインを突破したら＋1点。';
+  p.blocks[3].points='仕掛けた選手をほめる';
+  p.blocks[3].diagram.items=formationItems('8','3-3-1',true);
+  p.blocks[4].desc='ストレッチ・振り返り';
+  return p;
+}
+
+/* ---------- ピッチ描画 ---------- */
+function dims(format,d){
+  const P=PITCH[format];
+  if(d.area==='grid')return{W:+d.gw||20,H:+d.gh||20};
+  if(d.area==='half')return{W:P.W,H:P.L/2};
+  return{W:P.W,H:P.L};
+}
+function pitchLines(format,sw){
+  const P=PITCH[format],W=P.W,L=P.L,cx=W/2;
+  let s=`<g fill="none" stroke="#fff" stroke-width="${sw}" opacity=".9">`;
+  s+=`<rect x="0" y="0" width="${W}" height="${L}"/>`;
+  s+=`<line x1="0" y1="${L/2}" x2="${W}" y2="${L/2}"/><circle cx="${cx}" cy="${L/2}" r="${P.CR}"/>`;
+  s+=`<circle cx="${cx}" cy="${L/2}" r="${sw*1.6}" fill="#fff"/>`;
+  for(const top of [true,false]){
+    const y0=top?0:L, dir=top?1:-1;
+    const pa=top?0:L-P.PAd, ga=top?0:L-P.GAd;
+    s+=`<rect x="${cx-P.PAw/2}" y="${pa}" width="${P.PAw}" height="${P.PAd}"/>`;
+    s+=`<rect x="${cx-P.GAw/2}" y="${ga}" width="${P.GAw}" height="${P.GAd}"/>`;
+    s+=`<circle cx="${cx}" cy="${y0+dir*P.PS}" r="${sw*1.6}" fill="#fff"/>`;
+    if(P.arc){const dy=P.PAd-P.PS,hx=Math.sqrt(P.CR*P.CR-dy*dy),yy=y0+dir*P.PAd;
+      s+=`<path d="M${cx-hx},${yy} A${P.CR},${P.CR} 0 0 ${top?0:1} ${cx+hx},${yy}"/>`;}
+    s+=`<rect x="${cx-P.G/2}" y="${top?-1.6:L}" width="${P.G}" height="1.6" stroke-width="${sw*0.8}"/>`;
+  }
+  return s+'</g>';
+}
+function arrowPath(it,r){
+  const {x1,y1,x2,y2}=it;
+  if(it.t!=='drib')return`M${x1},${y1} L${x2},${y2}`;
+  const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy)||1,ux=dx/len,uy=dy/len,nx=-uy,ny=ux;
+  const step=r*0.9,amp=r*0.45,end=Math.max(0,len-r*1.4);
+  let d=`M${x1},${y1}`,k=0;
+  for(let t=step;t<end;t+=step){k++;const a=(k%2?1:-1)*amp;d+=` L${x1+ux*t+nx*a},${y1+uy*t+ny*a}`}
+  return d+` L${x2},${y2}`;
+}
+function svgContent(format,d,mid,temp){
+  const {W,H}=dims(format,d),M=Math.max(W,H),pad=M*0.05,r=M/44,sw=M/300;
+  const vb=[-pad,-pad,W+pad*2,H+pad*2];
+  let s=`<defs>
+   <marker id="aw${mid}" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#fff"/></marker>
+   <marker id="ay${mid}" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#ffe14d"/></marker>
+   <clipPath id="cp${mid}"><rect x="${vb[0]}" y="${vb[1]}" width="${vb[2]}" height="${vb[3]}"/></clipPath></defs>`;
+  s+=`<rect x="${vb[0]}" y="${vb[1]}" width="${vb[2]}" height="${vb[3]}" fill="#1b6b38"/>`;
+  const stripes=10;for(let i=0;i<stripes;i+=2)s+=`<rect x="${vb[0]}" y="${i*H/stripes}" width="${vb[2]}" height="${H/stripes}" fill="#227a41" opacity=".8"/>`;
+  s+=`<g clip-path="url(#cp${mid})">`;
+  if(d.area==='grid')s+=`<rect x="0" y="0" width="${W}" height="${H}" fill="none" stroke="#fff" stroke-width="${sw}" stroke-dasharray="${sw*4} ${sw*3}" opacity=".85"/>`;
+  else s+=pitchLines(format,sw);
+  s+='</g>';
+  const items=d.items.slice();if(temp)items.push(temp);
+  // 矢印を下、物を上に
+  const order=items.map((it,i)=>[it,i]).sort((a,b)=>(isArrow(b[0].t)?1:0)-(isArrow(a[0].t)?1:0));
+  for(const [it,i] of order){
+    const di=it===temp?'':` data-i="${i}"`;
+    if(isArrow(it.t)){
+      const col=it.t==='run'?'#ffe14d':'#fff',mk=it.t==='run'?`ay${mid}`:`aw${mid}`;
+      s+=`<g${di}><path d="${arrowPath(it,r)}" stroke="transparent" stroke-width="${r*1.6}" fill="none"/><path d="${arrowPath(it,r)}" stroke="${col}" stroke-width="${sw*1.7}" fill="none" stroke-linejoin="round" ${it.t==='run'?`stroke-dasharray="${sw*5} ${sw*3.5}"`:''} marker-end="url(#${mk})"/></g>`;
+    }else if(it.t==='cone'){
+      const c=r*0.85;s+=`<g${di}><circle cx="${it.x}" cy="${it.y}" r="${r*1.2}" fill="transparent"/><polygon points="${it.x},${it.y-c} ${it.x+c*0.85},${it.y+c*0.6} ${it.x-c*0.85},${it.y+c*0.6}" fill="#ff8a1d" stroke="#fff" stroke-width="${sw*0.7}"/></g>`;
+    }else if(it.t==='ball'){
+      s+=`<g${di}><circle cx="${it.x}" cy="${it.y}" r="${r*1.1}" fill="transparent"/><circle cx="${it.x}" cy="${it.y}" r="${r*0.55}" fill="#fff" stroke="#222" stroke-width="${sw*0.6}"/></g>`;
+    }else if(it.t==='mini'){
+      const w=r*3.2,h=r*1.1;s+=`<g${di}><rect x="${it.x-w/2}" y="${it.y-h/2}" width="${w}" height="${h}" fill="rgba(255,255,255,.25)" stroke="#fff" stroke-width="${sw*1.2}" rx="${sw}"/></g>`;
+    }else{
+      const fill=it.t==='a'?'#e53935':it.t==='b'?'#1e63d6':'#f4c20d',tc=it.t==='gk'?'#222':'#fff';
+      const lab=String(it.n??''),fs=lab.length>1?r*0.85:r*1.1;
+      s+=`<g${di}><circle cx="${it.x}" cy="${it.y}" r="${r}" fill="${fill}" stroke="#fff" stroke-width="${sw*0.9}"/><text x="${it.x}" y="${it.y}" text-anchor="middle" dominant-baseline="central" font-size="${fs}" font-weight="700" fill="${tc}" font-family="sans-serif" pointer-events="none">${esc(lab)}</text></g>`;
+    }
+  }
+  return{s,vb:vb.join(' '),r};
+}
+const isArrow=t=>t==='pass'||t==='run'||t==='drib';
+function thumbSVG(format,d){
+  const {s,vb}=svgContent(format,d,uid());
+  return`<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">${s}</svg>`;
+}
+function formationItems(format,form,opp){
+  const P=PITCH[format],W=P.W,L=P.L,lines=form.split('-').map(Number),out=[];
+  const place=(team,mirror)=>{
+    const pt=(x,y)=>mirror?{x:W-x,y:L-y}:{x,y};
+    let n=2;
+    out.push(Object.assign({t:team==='a'?'gk':'b',n:'GK'},pt(W/2,L*0.955)));
+    lines.forEach((cnt,li)=>{
+      const y=L*(0.82-(0.27*li/Math.max(1,lines.length-1)));
+      for(let i=0;i<cnt;i++){out.push(Object.assign({t:team,n:n++},pt(W*(i+1)/(cnt+1),y)))}
+    });
+  };
+  place('a',false);if(opp)place('b',true);
+  if(opp)out.push({t:'ball',x:W/2,y:L/2});
+  return out;
+}
+
+/* ---------- メニューライブラリ ---------- */
+// stage: w=ウォーミングアップ g=グリッド練習 h=ハーフ練習。halfの座標は8人制(幅50×奥行34)基準で自動換算
+const THEMES=['ドリブル','パス','シュート','守備','ビルドアップ','切り替え'];
+const LIB=[
+ {id:'w1',stage:'w',name:'ボールフィーリング＆コーンドリブル',th:THEMES,area:'grid',gw:20,gh:20,
+  desc:'1人1球。足裏・インアウトでボールタッチ → コーン間をドリブル。コーチの合図でターン・ストップ。',points:'顔を上げる／タッチを細かく／合図への反応の速さ',
+  items:[{t:'cone',x:4,y:4},{t:'cone',x:16,y:4},{t:'cone',x:4,y:16},{t:'cone',x:16,y:16},{t:'a',x:7,y:12,n:1},{t:'ball',x:8.2,y:10.8},{t:'drib',x1:7,y1:11,x2:13,y2:6}]},
+ {id:'w2',stage:'w',name:'対面パス＆コントロール',th:['パス','ビルドアップ','シュート'],area:'grid',gw:15,gh:10,
+  desc:'2人1組で対面パス。インサイド → 逆足 → ワンタッチ → 止めてから運ぶ、と段階的に。',points:'止める前に周りを見る／次に蹴りやすい場所に止める',
+  items:[{t:'cone',x:2,y:2},{t:'cone',x:13,y:2},{t:'cone',x:2,y:8},{t:'cone',x:13,y:8},{t:'a',x:3,y:3,n:1},{t:'a',x:12,y:3,n:2},{t:'a',x:3,y:7,n:3},{t:'a',x:12,y:7,n:4},{t:'ball',x:4.3,y:3},{t:'ball',x:4.3,y:7},{t:'pass',x1:4.5,y1:3,x2:10.8,y2:3},{t:'pass',x1:4.5,y1:7,x2:10.8,y2:7}]},
+ {id:'w3',stage:'w',name:'しっぽ取り鬼ごっこ',th:['守備','切り替え','ドリブル'],area:'grid',gw:15,gh:15,
+  desc:'全員ビブスをしっぽにする。鬼（青）が取りに行く。取られたら鬼と交代。慣れたらボールを持って行う。',points:'相手との距離をとる／急な方向転換／鬼は逃げ道をふさぐ',
+  items:[{t:'cone',x:1,y:1},{t:'cone',x:14,y:1},{t:'cone',x:1,y:14},{t:'cone',x:14,y:14},{t:'a',x:4,y:4,n:1},{t:'a',x:11,y:4,n:2},{t:'a',x:4,y:11,n:3},{t:'a',x:11,y:11,n:4},{t:'b',x:7.5,y:7.5,n:1},{t:'run',x1:7.5,y1:7,x2:10,y2:5},{t:'run',x1:11,y1:4.5,x2:13,y2:2.5}]},
+ {id:'g1',stage:'g',name:'1対1＋ミニゴール',th:['ドリブル','守備'],area:'grid',gw:25,gh:20,
+  desc:'攻撃はミニゴール通過で1点。守備は奪ったら逆のミニゴールへ。30秒〜1分で交代。',points:'攻撃：スピードの変化、抜いたら加速／守備：寄せて片側に追い込む',
+  items:[{t:'mini',x:12.5,y:1.5},{t:'mini',x:12.5,y:18.5},{t:'cone',x:2,y:2},{t:'cone',x:23,y:2},{t:'cone',x:2,y:18},{t:'cone',x:23,y:18},{t:'a',x:12.5,y:15.5,n:1},{t:'ball',x:13.7,y:14.4},{t:'b',x:12.5,y:7,n:1},{t:'drib',x1:12.5,y1:14.5,x2:17,y2:6},{t:'run',x1:12.5,y1:8,x2:15,y2:10}]},
+ {id:'g2',stage:'g',name:'鳥かご（4対2）',th:['パス','ビルドアップ'],area:'grid',gw:12,gh:12,
+  desc:'外の4人がパスを回し、中の2人が奪う。奪ったら（またはミスした人が）中と交代。',points:'ボールを受ける前に体の向きをつくる／パスコースを2つ持つ／中の2人は連動して寄せる',
+  items:[{t:'cone',x:0,y:0},{t:'cone',x:12,y:0},{t:'cone',x:0,y:12},{t:'cone',x:12,y:12},{t:'a',x:6,y:1,n:1},{t:'a',x:11,y:6,n:2},{t:'a',x:6,y:11,n:3},{t:'a',x:1,y:6,n:4},{t:'ball',x:7,y:1.6},{t:'b',x:5,y:5,n:1},{t:'b',x:7.2,y:7.2,n:2},{t:'pass',x1:7,y1:1.8,x2:10.4,y2:5.3},{t:'pass',x1:10.6,y1:6.8,x2:6.8,y2:10.4}]},
+ {id:'g3',stage:'g',name:'3対1 → 攻守の切り替え',th:['切り替え','パス'],area:'grid',gw:15,gh:15,
+  desc:'3人がパスを回し、1人が奪う。奪われた瞬間に、奪われた人が守備に、奪った人が攻撃側に入れ替わる。',points:'奪われたらすぐ切り替える（3秒）／奪ったら一度ボールを落ち着かせる',
+  items:[{t:'cone',x:1,y:1},{t:'cone',x:14,y:1},{t:'cone',x:1,y:14},{t:'cone',x:14,y:14},{t:'a',x:3,y:3,n:1},{t:'a',x:12,y:3,n:2},{t:'a',x:7.5,y:12.5,n:3},{t:'ball',x:4.2,y:3.6},{t:'b',x:7.5,y:6.5,n:1},{t:'pass',x1:4.5,y1:3.2,x2:10.8,y2:3.2},{t:'run',x1:7.5,y1:6,x2:10,y2:4.3}]},
+ {id:'g4',stage:'g',name:'2対2＋サーバー',th:['守備','ドリブル'],area:'grid',gw:20,gh:25,
+  desc:'サーバー（S）からの配球で2対2。攻撃はミニゴールを狙う。守備は奪ったらサーバーへ返して攻守交代。',points:'1人目がボールに寄せ、2人目がカバー／縦を切って外に追い出す',
+  items:[{t:'mini',x:10,y:1.5},{t:'cone',x:1,y:1},{t:'cone',x:19,y:1},{t:'cone',x:1,y:24},{t:'cone',x:19,y:24},{t:'gk',x:10,y:24,n:'S'},{t:'a',x:6,y:17,n:1},{t:'a',x:14,y:17,n:2},{t:'b',x:7,y:9,n:1},{t:'b',x:13,y:10,n:2},{t:'pass',x1:10,y1:23,x2:6.5,y2:18.2},{t:'run',x1:7,y1:9.8,x2:6.5,y2:14.5},{t:'run',x1:12.8,y1:10.8,x2:10,y2:13}]},
+ {id:'g5',stage:'g',name:'3ゾーンパス（前進）',th:['ビルドアップ','パス'],area:'grid',gw:30,gh:20,
+  desc:'3つのゾーンに分け、端のゾーンから逆の端までパスをつないだら1点。真ん中のゾーンの相手をかわして前進する。',points:'パスコースを作るための立ち位置／縦パスが無理なら幅を使う／受け手は相手の間に立つ',
+  items:[{t:'cone',x:0,y:0},{t:'cone',x:10,y:0},{t:'cone',x:20,y:0},{t:'cone',x:30,y:0},{t:'cone',x:0,y:20},{t:'cone',x:10,y:20},{t:'cone',x:20,y:20},{t:'cone',x:30,y:20},{t:'a',x:4,y:10,n:1},{t:'a',x:15,y:4,n:2},{t:'a',x:15,y:16,n:3},{t:'a',x:26,y:10,n:4},{t:'ball',x:5.2,y:9.2},{t:'b',x:13,y:10,n:1},{t:'b',x:17,y:9,n:2},{t:'pass',x1:5.2,y1:9,x2:14,y2:4.8},{t:'pass',x1:16,y1:4.6,x2:25,y2:9.2}]},
+ {id:'h1',stage:'h',name:'2対1 → シュート',th:['ドリブル','シュート','パス'],area:'half',
+  desc:'2人で攻撃、1人が守備。数的優位を生かしてシュートまで。守備が奪ったらハーフラインへ運んで1点。',points:'ドリブルで守備を引きつけてからパス／守備がパスを警戒したら自分で行く',
+  items:[{t:'gk',x:25,y:2,n:'GK'},{t:'a',x:18,y:26,n:1},{t:'a',x:32,y:26,n:2},{t:'ball',x:19.2,y:24.8},{t:'b',x:25,y:16,n:1},{t:'drib',x1:18,y1:25,x2:21,y2:17},{t:'run',x1:32,y1:25,x2:32,y2:14}]},
+ {id:'h2',stage:'h',name:'壁パス → シュート',th:['シュート','パス'],area:'half',
+  desc:'1が2に縦パス → 2が落とす（壁パス） → 1が走り込んでシュート。左右両方から行う。',points:'パスを出したらすぐ動き出す／シュートは逆サイドのネットを狙う／GKの位置を見る',
+  items:[{t:'gk',x:25,y:2,n:'GK'},{t:'a',x:25,y:28,n:1},{t:'ball',x:26.2,y:27},{t:'a',x:25,y:17,n:2},{t:'cone',x:20,y:21},{t:'cone',x:30,y:21},{t:'pass',x1:25.3,y1:26.8,x2:25.2,y2:18.5},{t:'pass',x1:26,y1:16.5,x2:30.5,y2:13},{t:'run',x1:26.5,y1:27,x2:31,y2:14},{t:'pass',x1:31,y1:12.5,x2:23,y2:0.8}]},
+ {id:'h3',stage:'h',name:'ドリブル → シュート',th:['シュート','ドリブル'],area:'half',
+  desc:'コーンの間をドリブルで抜けてからシュート。慣れたらコーチがプレッシャー役で後ろから追う。',points:'最後のタッチでシュートしやすい位置にボールを置く／シュート前に顔を上げる',
+  items:[{t:'gk',x:25,y:2,n:'GK'},{t:'a',x:25,y:30,n:1},{t:'ball',x:26.2,y:29},{t:'cone',x:25,y:26},{t:'cone',x:22.5,y:23},{t:'cone',x:26,y:20},{t:'drib',x1:26,y1:29,x2:21,y2:16},{t:'pass',x1:21.3,y1:15.4,x2:27,y2:0.8}]},
+ {id:'h4',stage:'h',name:'GK＋3対2 ビルドアップ',th:['ビルドアップ'],area:'half',
+  desc:'自陣ゴール（上）のGKから開始。3人で相手2人をかわし、ハーフライン付近のミニゴールを通過したら1点。相手は奪ったら即シュート。',points:'GKも数に入れて数的優位をつくる／幅をとってパスコースを広げる／相手が来たら逆へ',
+  items:[{t:'gk',x:25,y:2,n:'GK'},{t:'a',x:9,y:9,n:1},{t:'a',x:41,y:9,n:2},{t:'a',x:25,y:14,n:3},{t:'b',x:18,y:17,n:1},{t:'b',x:32,y:17,n:2},{t:'mini',x:12,y:32},{t:'mini',x:38,y:32},{t:'ball',x:26.3,y:3},{t:'pass',x1:24,y1:3,x2:10.5,y2:8.2},{t:'run',x1:25,y1:15,x2:20,y2:22}]},
+ {id:'h5',stage:'h',name:'3対3＋GK（カウンター付き）',th:['切り替え','守備'],area:'half',
+  desc:'3対3でゴールを狙う。守備側は奪ったらハーフライン側のミニゴールへカウンター。',points:'奪われた瞬間に一番近い人がすぐ寄せる／奪ったら前へ速く',
+  items:[{t:'gk',x:25,y:2,n:'GK'},{t:'a',x:15,y:22,n:1},{t:'a',x:25,y:26,n:2},{t:'a',x:35,y:22,n:3},{t:'ball',x:26.2,y:25},{t:'b',x:17,y:15,n:1},{t:'b',x:25,y:18,n:2},{t:'b',x:33,y:15,n:3},{t:'mini',x:12,y:32},{t:'mini',x:38,y:32},{t:'run',x1:25,y1:19,x2:25,y2:23.5}]},
+];
+const A=(x,y,n)=>({t:'a',x,y,n}),Bp=(x,y,n)=>({t:'b',x,y,n}),K=(x,y,n='GK')=>({t:'gk',x,y,n}),C=(x,y)=>({t:'cone',x,y}),O=(x,y)=>({t:'ball',x,y}),M=(x,y)=>({t:'mini',x,y}),
+ P=(x1,y1,x2,y2)=>({t:'pass',x1,y1,x2,y2}),R=(x1,y1,x2,y2)=>({t:'run',x1,y1,x2,y2}),D=(x1,y1,x2,y2)=>({t:'drib',x1,y1,x2,y2}),
+ box=(w,h,i=0)=>[C(i,i),C(w-i,i),C(i,h-i),C(w-i,h-i)];
+const L2=(id,stage,name,th,area,gw,gh,desc,points,items)=>LIB.push({id,stage,name,th,area,gw,gh,desc,points,items});
+// ---- ウォーミングアップ ----
+L2('w4','w','リフティング＆キャッチ',['ドリブル','パス','シュート'],'grid',15,15,'手で投げて、ももで1回→キャッチ、足で1回→キャッチ…と段階的に。最後は連続回数に挑戦。','ボールをよく見る／軸足を安定させる',[...box(15,15,1),A(5,5,1),O(5,3.6),A(10,10,2),O(10,8.6)]);
+L2('w5','w','ブラジル体操＋ステップワーク',THEMES,'grid',20,10,'コーン間を往復しながら、もも上げ・サイドステップ・バック走・クロスステップ。最後はダッシュ。','姿勢を正す／腕をしっかり振る／接地を短く',[C(2,2),C(18,2),C(2,5),C(18,5),C(2,8),C(18,8),A(0.8,2,1),A(0.8,5,2),A(0.8,8,3),R(2.5,2,17,2),R(2.5,5,17,5),R(2.5,8,17,8)]);
+L2('w6','w','色鬼ドリブル',['ドリブル','守備'],'grid',20,20,'全員ドリブル。コーチが色を言ったら、その色のマーカーへ運ぶ。鬼（青）にボールを外へ出されたら交代。','周りを見ながら運ぶ／鬼から遠い方へ',[...box(20,20,1),C(10,4),C(4,10),C(16,10),C(10,16),A(6,6,1),O(7,5.2),A(14,6,2),O(15,5.2),A(8,14,3),O(9,13.2),Bp(11,10,1),D(7,6,9.4,4.6),R(11,10.6,14,7.2)]);
+L2('w7','w','パス＆ゴー（三角形）',['パス','ビルドアップ'],'grid',12,12,'三角形に並び、パスを出した方向へ走って次の列へ。2タッチ → 1タッチ → 逆回り。','受ける前に体を開く／パスしたらすぐ動く',[C(6,1),C(1,10),C(11,10),A(6,2,1),O(6.6,3),A(2,10,2),A(10,10,3),P(6.8,3.4,9.6,8.8),R(5.4,2.8,8.6,9.4)]);
+L2('w8','w','ダイヤモンドパス',['パス','ビルドアップ'],'grid',16,16,'4つのコーンでひし形。パスを受けたら体の向きを変えて次へ。外回り・内回り・ワンツー入りへ発展。','体の向きで次のパス先をつくる／パススピード',[C(8,1),C(15,8),C(8,15),C(1,8),A(8,2,1),A(14,8,2),A(8,14,3),A(2,8,4),O(8.6,3.2),P(9,3.4,13.2,7.4),P(13.4,8.8,8.8,13.2)]);
+L2('w9','w','ボールハンティング',['守備','切り替え'],'grid',15,15,'全員1球ずつドリブル。守備（青）が奪ってグリッド外へ出したら、奪われた人も守備に加わる。最後まで残った人の勝ち。','取られない体の使い方／守備は寄せる距離とタイミング',[...box(15,15,0.5),A(4,4,1),O(5,4.6),A(11,4,2),O(12,4.6),A(4,11,3),O(5,11.6),A(11,11,4),O(12,11.6),Bp(7.5,7.5,1),R(7.5,8,4.8,10.4)]);
+L2('w10','w','対面ボレー',['シュート'],'grid',15,10,'2人1組。手で投げたボールをインステップ・インサイドで正確に返す。浮き球の処理とミートの確認。','足首を固定する／ボールの中心をとらえる',[A(3,5,1),A(12,5,2),O(10.8,4.4),P(10.5,4.2,4.4,4.2),P(4.4,5.8,10.5,5.8)]);
+L2('w11','w','ターン練習（コーン往復）',['ドリブル','ビルドアップ'],'grid',15,10,'コーンまでドリブル → インサイド・アウトサイド・クライフターンで方向転換して戻る。','ターン前に減速、ターン後に加速',[C(13,3),C(13,7),A(2,3,1),O(3.2,3),A(2,7,2),O(3.2,7),D(3.6,3,12,3),D(3.6,7,12,7)]);
+L2('w12','w','ハンドパスゲーム',['切り替え','守備','ビルドアップ'],'grid',20,20,'手でパスをつなぐゲーム（持ったら3歩まで）。10本つないだら1点。落としたら相手ボール。','空いたスペースへ動く／奪われたらすぐ守備',[...box(20,20,0.5),A(5,5,1),A(15,6,2),A(10,15,3),Bp(9,8,1),Bp(13,12,2),Bp(6,13,3),O(6.2,5.5),P(6.4,5,13.8,5.8),R(10,14.4,14,10.8)]);
+// ---- グリッド ----
+L2('g6','g','ドリブル陣取り（ライン突破）',['ドリブル'],'grid',20,25,'攻撃は手前のラインから一斉にドリブル。奥のラインをドリブルで通過したら1点。中央ゾーンの守備がボールを外へ出す。','空いているスペースを見つける／かわしたら加速',[...box(20,25,0),C(0,9),C(20,9),C(0,16),C(20,16),A(4,22,1),A(10,22,2),A(16,22,3),O(4.8,21),O(10.8,21),O(16.8,21),Bp(7,12.5,1),Bp(13,12.5,2),D(10.8,20.6,14,5)]);
+L2('g7','g','2対1 ライン突破',['ドリブル','パス'],'grid',20,20,'攻撃2人で守備1人を突破し、奥のラインをドリブルで通過したら1点。','ボールを持った選手が守備を引きつける／パスかドリブルかの判断',[...box(20,20,0),A(6,17,1),A(14,17,2),O(7,16),Bp(10,8,1),D(7,15.5,9,11),P(9.4,10.6,14,6.6),R(14,16.4,15,7.4)]);
+L2('g8','g','4対4＋4フリーマン',['パス','ビルドアップ'],'grid',25,25,'グリッドの4辺にフリーマン（F）。ボール保持側はフリーマンを使って数的優位でパスを回す。10本で1点。','フリーマンに預けて動き直す／3人目の動き',[...box(25,25,0),K(12.5,0.6,'F'),K(24.4,12.5,'F'),K(12.5,24.4,'F'),K(0.6,12.5,'F'),A(7,7,1),A(18,8,2),A(8,18,3),A(17,17,4),Bp(12,10,1),Bp(10,14,2),Bp(15,13,3),Bp(13,19,4),O(7.9,7.9),P(7.8,6.6,11.8,1.8),P(13.4,1.6,17.4,7)]);
+L2('g9','g','5対2 鳥かご（2タッチ）',['パス'],'grid',15,15,'外5人・中2人。2タッチ以内。2人の間を通すパスは2本分。ミスした人と奪った人が交代。','止める位置で次のプレーを速く／中を通すパスを狙う',[...box(15,15,0),A(7.5,1,1),A(14,6,2),A(12,14,3),A(3,14,4),A(1,6,5),Bp(6,7,1),Bp(9,9,2),O(8.4,1.6),P(8,2,3.6,13),P(4.6,14,10.6,14)]);
+L2('g10','g','3対3＋2 ポゼッション',['パス','ビルドアップ','切り替え'],'grid',25,20,'両端にフリーマン（F）を置いた3対3。逆側のフリーマンまでつないだら1点。奪われたらすぐ切り替え。','前を向ける選手を探す／奪われた瞬間に囲む',[...box(25,20,0),K(12.5,0.6,'F'),K(12.5,19.4,'F'),A(6,14,1),A(19,13,2),A(12,9,3),Bp(9,10,1),Bp(16,9,2),Bp(12,5,3),O(12.5,18.2),P(12,18.4,6.8,14.8),P(7,13.4,11.4,9.8),P(12.6,8.2,12.5,1.8)]);
+L2('g11','g','背負った状態からの1対1',['ドリブル','守備'],'grid',15,20,'攻撃はゴールを背にしてサーバー（S）からボールを受け、ターンしてミニゴールを狙う。守備は後ろからプレッシャー。','受ける前に守備の位置を確認／体を入れてボールを守る',[M(7.5,1.5),...box(15,20,0),K(7.5,19,'S'),A(7.5,11,1),Bp(7.5,8.4,1),P(7.5,18,7.5,12.2),D(8,10.4,11,4)]);
+L2('g12','g','1対1の守備（縦を切る）',['守備'],'grid',12,20,'サーバー（S）からのパスで1対1。守備は縦を切ってサイドへ追い出す。攻撃は奥のラインをドリブル突破で1点。','素早く寄せて最後は減速／半身で構える／足を出すタイミング',[...box(12,20,0),K(6,19,'S'),A(6,14,1),Bp(6,5,1),P(6,18,6,15.2),R(6,5.8,5.4,11.6),D(6.6,13.4,10,4)]);
+L2('g13','g','2対2 ライン通過',['守備','ドリブル'],'grid',20,20,'2対2。攻撃は奥のラインをドリブルで通過したら1点。守備は2人で連係して奪う。','チャレンジ＆カバー／攻撃は2人の間を狙う',[...box(20,20,0),A(6,16,1),A(14,16,2),O(6.8,15),Bp(8,8,1),Bp(13,6,2),D(6.8,14.6,9,11),R(8,8.8,8.4,11.8),R(13,6.8,10.6,9)]);
+L2('g14','g','ゲート通過ドリブル',['ドリブル'],'grid',25,25,'グリッド内にコーンのゲートを複数置く。1分間で何個ゲートをドリブル通過できるか。同じゲートは連続不可。','顔を上げて空いたゲートを探す／通過後の方向転換',[...box(25,25,0),C(5,5),C(5,8),C(18,4),C(21,4),C(4,19),C(7,19),C(19,18),C(19,21),C(12,11),C(12,14),A(10,6,1),O(9.4,7),A(16,15,2),O(15.2,15.8),D(9,7,4.4,6.6),D(15,16.2,5.6,19.8)]);
+L2('g15','g','4ゴールゲーム 3対3',['切り替え','守備','パス'],'grid',25,25,'各チーム2つのミニゴールを守り、相手の2つを狙う。守備が寄った逆のゴールを素早く狙う。','逆サイドのゴールを見る／奪われたらすぐゴール前を埋める',[...box(25,25,0),M(6,1),M(19,1),M(6,24),M(19,24),A(6,17,1),A(13,18,2),A(19,15,3),Bp(8,10,1),Bp(13,8,2),Bp(18,9,3),O(13.6,17),P(14,17,18.4,15.6),D(19,14.4,19,3)]);
+L2('g16','g','トランジション 3対3（3チーム制）',['切り替え'],'grid',25,20,'3チーム制（赤・青・待機）。ゴールを決めたら守備チームが外に出て、待機チームがすぐ入る。','決めたらすぐ守備へ／入るチームは素早く',[...box(25,20,0),M(12.5,1),M(12.5,19),A(8,13,1),A(13,11,2),A(17,14,3),Bp(9,7,1),Bp(14,5,2),Bp(17,8,3),K(0.8,6,'待'),K(0.8,10,'待'),K(0.8,14,'待'),O(13.4,10.2),D(13.4,10,12.8,3)]);
+L2('g17','g','ワンツーで抜ける',['パス'],'grid',20,15,'1が守備に向かって運び、2とのワンツーで抜ける。左右両方で行う。','パスは相手の足が届かない方へ／リターンを受ける走り出しのタイミング',[...box(20,15,0),A(3,12,1),O(4,11.2),A(10,4,2),Bp(9,9,1),D(4.2,11,7,10.2),P(7.4,9.8,9.8,5.2),P(10.6,4.4,15,6),R(7.6,10.6,14.4,7.4)]);
+L2('g18','g','2人で奪う（ボール奪取）',['守備'],'grid',20,20,'ドリブルしている選手から、守備2人が協力してボールを奪う。奪ったらグリッドの外へ運び出す。','1人が寄せ、もう1人が逃げ道をふさぐ',[...box(20,20,0),A(10,10,1),O(11,10.8),Bp(6,6,1),Bp(15,8,2),R(6.6,6.6,9,9),R(14.4,8.6,12,10.4)]);
+L2('g19','g','縦パス＆サポート',['ビルドアップ'],'grid',20,20,'奥の味方へ縦パスを入れ、落としを前向きでサポートした選手が受けて前へ運ぶ。守備1人を加えて発展。','縦パスの受け手は相手の背中から離れる／サポートは斜め後ろ',[...box(20,20,0),A(10,18,1),O(10,17),A(10,6,2),A(14,14,3),Bp(10,9,1),P(10.2,16.8,10.2,7.2),P(10.6,6.6,13.6,13),D(14.2,13.4,15,3)]);
+L2('g20','g','4対2 → 前進（ライン通過）',['ビルドアップ','切り替え'],'grid',20,25,'手前のゾーンで4対2。5本つないだら奥のゾーンへ運ぶかパスを通して1点。守備は奪ったら手前のラインへ運ぶ。','つなぎながら前進のタイミングを探す／前へのパスが通る位置取り',[...box(20,25,0),C(0,12),C(20,12),A(4,20,1),A(16,20,2),A(10,23.5,3),A(10,15,4),Bp(8,18,1),Bp(13,17,2),O(10.8,22.8),P(9.6,22.6,4.8,20.8),P(5,19.4,9.6,15.6),D(10,14.4,10,5)]);
+L2('g21','g','2対2＋両側GK シュートゲーム',['シュート'],'grid',25,20,'両側にGKを置いた2対2。ハーフを越えたらどこからでもシュートOK。とにかく打つ。','打てるときは迷わず打つ／こぼれ球に詰める',[...box(25,20,0),C(10,0),C(15,0),C(10,20),C(15,20),K(12.5,1),K(12.5,19),A(9,13,1),A(16,12,2),Bp(10,8,1),Bp(15,7,2),O(9.8,12.2),P(10,12.6,15.2,12.2),P(16,11.4,13,1.6)]);
+L2('g22','g','ターン＆パス（ボックス）',['パス','ビルドアップ'],'grid',15,15,'中央の選手が外からのパスを受け、ターンして別の外の選手へ。半身で受ける練習。','受ける前に首を振る／半身で受けて次へ',[...box(15,15,0),A(7.5,1,1),A(14,7.5,2),A(7.5,14,3),A(1,7.5,4),A(7.5,7.5,5),O(7.5,2.2),P(7.5,2.4,7.5,6.4),P(8.4,7.5,13,7.5)]);
+// ---- ハーフ ----
+L2('h6','h','クロス → シュート',['シュート','パス'],'half',0,0,'サイドの選手がドリブルで運んでクロス。中の2人がニアとファーに分かれて飛び込む。','クロスはGKと守備の間へ／ニアとファーで重ならない',[K(25,2),A(44,26,1),O(44,24.8),A(22,22,2),A(30,24,3),D(44,24.4,45,9),P(44.6,8.4,25,7),R(22,21.4,22,8),R(30,23.4,30,9)]);
+L2('h7','h','ミドルシュート',['シュート'],'half',0,0,'ペナルティエリアの外で横からのパスを受け、ワンタッチかツータッチでシュート。','軸足をボールの横に／低く強いシュート',[K(25,2),A(25,18,1),A(38,24,2),O(37,23.4),C(18,15),C(32,15),P(36.6,23,26,18.8),P(25,17,29,0.8)]);
+L2('h8','h','1対1 → シュート（GKあり）',['ドリブル','シュート','守備'],'half',0,0,'ハーフライン付近から1対1。攻撃は守備をかわしてシュート。守備は奪ったらハーフラインへ運ぶ。','守備を外した瞬間にシュート／守備はシュートコースを切る',[K(25,2),A(25,30,1),O(26,29),Bp(25,20,1),D(26,28.4,31,16),P(31,15.4,26,0.8),R(25,20.8,28,24)]);
+L2('h9','h','2対2＋GK',['守備','シュート'],'half',0,0,'2対2でゴールを狙う。守備は奪ったらハーフライン上のミニゴールへ。','守備は2人の距離を保つ／攻撃は2人の関係で崩す',[K(25,2),A(19,25,1),A(31,24,2),O(19.8,24),Bp(21,16,1),Bp(29,15,2),M(25,33),P(20.4,24,30,23.4),R(19,24.4,18,14)]);
+L2('h10','h','3対2 → シュート',['パス','シュート'],'half',0,0,'攻撃3人・守備2人。数的優位を生かしてフリーの選手をつくってシュート。','ボールを持っていない2人の位置取り／フリーの選手に早めにパス',[K(25,2),A(14,26,1),A(25,28,2),A(36,26,3),O(25.8,27),Bp(20,16,1),Bp(30,16,2),P(26,26.8,35,25.6),D(36,25.4,36,15),R(14,25.4,16,12),R(25,27.4,25,16)]);
+L2('h11','h','GK＋4対3（ライン突破）',['ビルドアップ'],'half',0,0,'自陣ゴール（上）のGKから開始。4人で3人をかわし、ハーフラインをドリブルで越えたら1点。守備は奪ったらシュート。','GKを使ってやり直す／相手のライン間で前を向く選手をつくる',[K(25,2),A(9,10,1),A(41,10,2),A(19,15,3),A(31,15,4),Bp(18,20,1),Bp(32,20,2),Bp(25,25,3),O(26.2,3),P(24,3.4,10.4,9.2),P(10,10.6,18.4,14.4),D(19.6,15.6,22,31)]);
+L2('h12','h','前線からのプレス（3対GK＋4）',['守備','切り替え'],'half',0,0,'相手（青）がGKから組み立て。赤の3人が前から奪いに行く。奪ってシュートで1点、相手がハーフラインを越えたら相手に1点。','パスコースを限定して追い込む／1人が行ったら後ろも連動',[K(25,2),Bp(10,9,1),Bp(40,9,2),Bp(20,7,3),Bp(30,7,4),A(18,14,1),A(32,14,2),A(25,20,3),O(11,9.8),R(18,13.4,12,10.6),R(25,19.4,21,11),R(32,13.4,30,9)]);
+L2('h13','h','4対4＋GK（カウンター付き）',['切り替え','守備'],'half',0,0,'4対4でゴールを狙う。守備側は奪ったらハーフライン上のミニゴール2つへカウンター。','奪われた瞬間の守備（5秒）／奪ったら最初のパスを前へ',[K(25,2),A(12,22,1),A(22,26,2),A(30,20,3),A(40,23,4),Bp(15,14,1),Bp(24,17,2),Bp(33,13,3),Bp(38,17,4),M(12,33),M(38,33),O(22.8,25),P(23,25.4,29.4,21),R(24,17.6,28,21)]);
+L2('h14','h','サイド攻撃（オーバーラップ）',['パス','ビルドアップ','シュート'],'half',0,0,'サイドの選手が中へ運び、後ろの選手が外を追い越す。パスを受けてクロス → 中でシュート。','追い越すのは中へ運び始めた瞬間／声をかける',[K(25,2),A(38,22,1),O(37.6,21),A(42,30,2),A(22,18,3),D(37.4,21,32,15),R(42,29.4,45,12),P(32,14.6,44.4,11.6),P(44.6,11,25,7),R(22,17.4,23,8)]);
+L2('h15','h','ポストプレー → シュート',['シュート','パス'],'half',0,0,'前線の2が背負ってボールを受け、落としたボールに1が走り込んでシュート。','ポストは体を当てて受ける／落としは走り込む方向へ',[K(25,2),A(25,14,2),Bp(25,11,1),A(25,28,1),O(25.8,27),P(25.6,26.8,25.4,15.4),P(24.4,14.8,20,19),R(24.4,27.4,20,20),P(19.8,18.4,23,0.8)]);
+L2('h16','h','カウンター 3対2',['切り替え','シュート'],'half',0,0,'ハーフライン付近で奪ったところから開始。3人で一気にゴールへ。10秒以内にシュート。','最初のパスを前へ／ボールを追い越して走る',[K(25,2),A(20,31,1),O(21,30),A(10,30,2),A(38,30,3),Bp(20,20,1),Bp(30,18,2),D(21,29.4,24,22),R(10,29.4,13,12),R(38,29.4,36,12)]);
+L2('h17','h','GKからの組み立て（パターン）',['ビルドアップ'],'half',0,0,'守備なしでGKから組み立て、決めたパターンで前進。例：GK → CB → SB → MF → FW。慣れたら守備を1人ずつ追加。','パスの順番と立ち位置を体で覚える／受ける角度',[K(25,2),A(14,8,1),A(36,8,2),A(6,16,3),A(44,16,4),A(25,18,5),A(25,30,6),O(26.2,3),P(24,3.2,14.6,7.2),P(14,9,6.6,15),P(7.2,16.4,23.8,18),P(25.2,19.2,25.2,28.8)]);
+L2('h18','h','こぼれ球シュート',['シュート'],'half',0,0,'コーチ（S）のシュートをGKが弾いたボールに2人が詰める。先に触った方がシュート。','シュートが打たれたら必ず詰める／GKを見て動く',[K(25,2),K(25,20,'S'),A(19,16,1),Bp(31,16,1),O(25,18.8),P(25,18.6,24,4),R(19,15.4,23,6),R(31,15.4,27,6)]);
+L2('h19','h','ゴール前の守備 3対3',['守備'],'half',0,0,'ゴール前で3対3＋GK。守備（赤）はマークの受け渡しとシュートブロックを意識。','ボールと相手を同時に見る／シュートコースに体を入れる',[K(25,2),A(18,14,1),A(25,11,2),A(32,14,3),Bp(16,20,1),Bp(26,18,2),Bp(36,21,3),O(36.6,20),R(32,14.6,35,19)]);
+const GAME_RULE={
+ 'ドリブル':'ドリブルで相手を抜いてからのゴールは2点。',
+ 'パス':'5本パスがつながったら1点。ワンタッチシュートのゴールは2点。',
+ 'シュート':'シュートで攻撃を終えたら＋1点（枠内）。ペナルティエリア外からも積極的に。',
+ '守備':'奪ってから10秒以内のゴールは2点。守備は2人で囲む意識。',
+ 'ビルドアップ':'リスタートはGKから。相手は最初の5秒はハーフラインを越えない。',
+ '切り替え':'奪われたら5秒以内に奪い返して決めたゴールは2点。',
+};
+const GRADES={
+ low:{label:'低学年（U-6〜U-8）',scale:0.8,note:'ルールは1つに絞り、遊びの要素を多めに。人数は少なく、ボールに触る回数を増やす。'},
+ mid:{label:'中学年（U-9〜U-10）',scale:1,note:'技術の反復と判断を組み合わせる。成功体験を多く。'},
+ hi:{label:'高学年（U-11〜U-12）',scale:1.1,note:'判断のスピードと味方との連係を求める。プレッシャーを強めに。'},
+ jr:{label:'中学生以上',scale:1.25,note:'試合強度に近づける。制限時間・タッチ数制限で負荷を上げる。'},
+};
+const TIMES={60:[10,15,15,15,5],90:[15,20,20,25,10],120:[20,25,25,40,10]};
+function libToBlock(dr,format,min,grade){
+  const b=blk(dr.name,min||dr.min||15,dr.area,dr.gw,dr.gh);
+  b.desc=dr.desc;b.points=dr.points;
+  let items=JSON.parse(JSON.stringify(dr.items));
+  const sc=GRADES[grade]?.scale||1;
+  if(dr.area==='grid'){b.diagram.gw=Math.round(dr.gw*sc);b.diagram.gh=Math.round(dr.gh*sc);items.forEach(it=>scaleIt(it,sc,sc))}
+  else if(dr.area==='half'){const P=PITCH[format];items.forEach(it=>scaleIt(it,P.W/50,(P.L/2)/34))}
+  b.diagram.items=items;return b;
+}
+function scaleIt(it,sx,sy){if('x' in it){it.x=+(it.x*sx).toFixed(2);it.y=+(it.y*sy).toFixed(2)}if('x1' in it){it.x1*=sx;it.x2*=sx;it.y1*=sy;it.y2*=sy}}
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function proposePlan(format,grade,theme,time,shuffle){
+  const T=TIMES[time]||TIMES[90],G=GRADES[grade];
+  const ws=LIB.filter(d=>d.stage==='w'&&d.th.includes(theme));
+  const ms=LIB.filter(d=>d.stage!=='w'&&d.th.includes(theme)).sort((a,b)=>(a.stage>b.stage?1:-1));
+  let w=shuffle?pick(ws):(ws.find(d=>d.th!==THEMES)||ws[0]),m1,m2;
+  if(shuffle&&ms.length>2){const s=ms.slice().sort(()=>Math.random()-.5).slice(0,2).sort((a,b)=>(a.stage>b.stage?1:-1));[m1,m2]=s}
+  else{m1=ms.find(d=>d.stage==='g')||ms[0];m2=ms.find(d=>d.stage==='h'&&d!==m1)||ms.find(d=>d!==m1)}
+  const p=newPlan(format);
+  p.title=theme+'の練習';p.theme=theme;p.grade=G.label;
+  p.aim=`${theme}をテーマに、ウォーミングアップ → 個人・小グループ → ゲームの順で段階的に高める。\n【学年のポイント】${G.note}`;
+  const game=blk('ゲーム（条件付き）',T[3],'full');
+  game.desc=`${format==='8'?'8対8':'11対11'}（人数に合わせて調整）。条件：${GAME_RULE[theme]}`;
+  game.points=`今日のテーマ「${theme}」が出たプレーをほめる／条件は途中で外して、普通の試合でも出せるか見る`;
+  game.diagram.items=formationItems(format,FORMS[format][0],true);
+  const cd=blk('クールダウン・振り返り',T[4],'grid',20,20);
+  cd.desc='ジョグ → ストレッチ。輪になって今日できたこと・難しかったことを選手に話してもらう。';
+  cd.points='選手の言葉で振り返らせる';
+  p.blocks=[libToBlock(w,format,T[0],grade),libToBlock(m1,format,T[1],grade),libToBlock(m2,format,T[2],grade),game,cd];
+  return p;
+}
+function proposeDialog(){
+  let f='8';
+  const m=modal(`<div class="ttl">💡 指導案を提案</div><p class="meta" style="margin:6px 0 4px">条件を選ぶと、メニュー例から1回分の指導案を組み立てます。作ったあと自由に直せます。</p>
+   <label class="f">形式</label><div class="seg" id="pf"><button data-f="11">11人制</button><button data-f="8" class="on">8人制</button></div>
+   <label class="f">対象</label><select id="pg">${Object.entries(GRADES).map(([k,g])=>`<option value="${k}" ${k==='mid'?'selected':''}>${g.label}</option>`).join('')}</select>
+   <label class="f">テーマ</label><select id="pt">${THEMES.map(t=>`<option>${t}</option>`).join('')}</select>
+   <label class="f">練習時間</label><select id="ptime"><option value="60">60分</option><option value="90" selected>90分</option><option value="120">120分</option></select>
+   <div class="row" style="justify-content:flex-end;margin-top:16px"><button class="btn" data-c>キャンセル</button><button class="btn pri" data-o>この条件で作る</button></div>`);
+  m.querySelectorAll('#pf button').forEach(b=>b.onclick=()=>{f=b.dataset.f;m.querySelectorAll('#pf button').forEach(x=>x.classList.toggle('on',x===b))});
+  m.querySelector('[data-c]').onclick=()=>m.remove();
+  m.querySelector('[data-o]').onclick=()=>{
+    const p=proposePlan(f,m.querySelector('#pg').value,m.querySelector('#pt').value,m.querySelector('#ptime').value,true);
+    S.plans.push(p);save();m.remove();openPlan(p.id);toast('指導案を作りました。内容は自由に編集できます');
+  };
+}
+function libDialog(bi){
+  const p=cur;let th=p.theme&&THEMES.includes(p.theme)?p.theme:'';
+  const m=modal('');
+  const draw=()=>{
+    const list=LIB.filter(d=>!th||d.th.includes(th));
+    m.querySelector('.box').innerHTML=`<div class="ttl">メニュー例から選ぶ <span class="badge">${LIB.length}種類</span></div>
+     <p class="meta" style="margin:6px 0 8px">選ぶと「${esc(p.blocks[bi].name)}」の内容と図が置き換わります。</p>
+     <select id="lt"><option value="">すべてのテーマ</option>${THEMES.map(t=>`<option ${t===th?'selected':''}>${t}</option>`).join('')}</select>
+     <div style="margin-top:10px">${list.map(d=>`<button class="lib-item" data-l="${d.id}"><span class="lt">${thumbSVG(p.format,libToBlock(d,p.format,15,'mid').diagram)}</span><span><span class="badge">${d.stage==='w'?'W-UP':d.area==='half'?'ハーフ':'グリッド'}</span><b>${esc(d.name)}</b><span class="meta">${esc(d.th.length>=THEMES.length?'全テーマ':d.th.join('・'))}</span></span></button>`).join('')}</div>
+     <div class="row" style="justify-content:flex-end"><button class="btn" data-c>閉じる</button></div>`;
+    m.querySelector('#lt').onchange=e=>{th=e.target.value;draw()};
+    m.querySelector('[data-c]').onclick=()=>m.remove();
+    m.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{
+      const d=LIB.find(x=>x.id===b.dataset.l),old=p.blocks[bi];
+      const gk=Object.keys(GRADES).find(k=>GRADES[k].label===p.grade)||'mid';
+      const nb=libToBlock(d,p.format,old.min,gk);
+      p.blocks[bi]=nb;save();m.remove();renderEdit(p.id);toast('メニューを入れ替えました');
+    });
+  };
+  draw();
+}
+
+/* ---------- 一覧 ---------- */
+const app=document.getElementById('app');
+function header(title,back){document.getElementById('htitle').textContent=title;document.getElementById('backBtn').style.display=back?'':'none'}
+document.getElementById('backBtn').onclick=()=>{location.hash='';renderList()};
+function totalMin(p){return p.blocks.reduce((a,b)=>a+(+b.min||0),0)}
+
+function renderList(){
+  header('Coaching Note',false);
+  const plans=S.plans.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  let h=`<div class="hero"><div class="en">Coaching<br>Note</div><div class="jp">サッカー指導案ノート ― 11人制・8人制対応</div>
+    <div class="stats"><div>${S.plans.length}<span>指導案</span></div><div>${LIB.length}<span>メニュー例</span></div><div>${THEMES.length}<span>テーマ</span></div></div></div>
+  <div class="row" style="margin-bottom:10px">
+    <button class="btn pri grow" data-new="11">＋ 11人制で作成</button>
+    <button class="btn or grow" data-new="8">＋ 8人制で作成</button></div>
+    <button class="btn ghost" id="propose">💡 テーマと学年から指導案を提案してもらう</button>`;
+  if(!plans.length)h+=`<div class="empty">まだ指導案がありません。<br>上のボタンから作成するか、<br><button class="btn sm" id="sample" style="margin-top:8px">サンプルを見る</button></div>`;
+  for(const p of plans){
+    h+=`<button class="plan-item ${p.format==='8'?'e':''}" data-open="${p.id}"><span class="badge ${p.format==='8'?'e':''}">${PITCH[p.format].label}</span>
+      <span class="meta">　${esc(p.date)}　${esc(p.grade)}</span>
+      <b>${esc(p.title||'（無題の指導案）')}</b>
+      <span class="meta">${p.theme?'テーマ：'+esc(p.theme)+'　':''}${totalMin(p)}分・${p.blocks.length}メニュー</span></button>`;
+  }
+  h+=`<h2>データ</h2><div class="card"><div class="meta" style="margin-bottom:10px;line-height:1.6">指導案はこの端末のブラウザに保存されます。機種変更や他の端末に移すときは、バックアップの文字列をコピーして、移した先で読み込んでください。${storageOK?'':'<br><b style="color:#c62828">この環境では保存が使えないため、ページを閉じると消えます。</b>'}</div>
+    <div class="row"><button class="btn sm" id="exp">バックアップをコピー</button><button class="btn sm" id="imp">バックアップを読み込む</button></div></div>`;
+  app.innerHTML=h;
+  app.querySelectorAll('[data-new]').forEach(b=>b.onclick=()=>{const p=newPlan(b.dataset.new);S.plans.push(p);save();openPlan(p.id)});
+  app.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openPlan(b.dataset.open));
+  const sm=document.getElementById('sample');if(sm)sm.onclick=()=>{const p=samplePlan();S.plans.push(p);save();openPlan(p.id)};
+  document.getElementById('propose').onclick=proposeDialog;
+  document.getElementById('exp').onclick=()=>copyText(JSON.stringify(S),'バックアップ');
+  document.getElementById('imp').onclick=importDialog;
+  window.scrollTo(0,0);
+}
+function openPlan(id){location.hash='plan';renderEdit(id)}
+
+/* ---------- 編集 ---------- */
+let cur=null;
+function renderEdit(id){
+  cur=S.plans.find(p=>p.id===id);if(!cur)return renderList();
+  const p=cur;header(p.title||'指導案',true);
+  let h=`<div class="card">
+    <label class="f">形式</label>
+    <div class="seg" id="fmt"><button data-f="11" class="${p.format==='11'?'on':''}">11人制</button><button data-f="8" class="${p.format==='8'?'on':''}">8人制</button></div>
+    <label class="f">タイトル</label><input data-k="title" value="${esc(p.title)}" placeholder="例：1対1で仕掛ける">
+    <div class="grid2">
+      <div><label class="f">日付</label><input type="date" data-k="date" value="${esc(p.date)}"></div>
+      <div><label class="f">対象</label><input data-k="grade" value="${esc(p.grade)}" placeholder="例：U-10"></div>
+      <div><label class="f">人数</label><input data-k="count" value="${esc(p.count)}" placeholder="例：16人"></div>
+      <div><label class="f">テーマ</label><input data-k="theme" value="${esc(p.theme)}" placeholder="例：ビルドアップ"></div>
+    </div>
+    <label class="f">ねらい</label><textarea data-k="aim" placeholder="この練習で身につけたいこと">${esc(p.aim)}</textarea>
+  </div><h2>練習メニュー</h2>`;
+  p.blocks.forEach((b,i)=>{
+    h+=`<div class="card" data-b="${i}">
+      <div class="block-head"><span class="bnum">${String(i+1).padStart(2,'0')}</span><input class="name grow" data-bk="name" value="${esc(b.name)}"><input class="min" type="number" inputmode="numeric" data-bk="min" value="${esc(b.min)}"><span class="meta">分</span></div>
+      <div class="thumb" data-board="${i}">${thumbSVG(p.format,b.diagram)}<span class="hint">✎ 図を編集</span></div>
+      <label class="f">内容・ルール</label><textarea data-bk="desc" placeholder="オーガナイズ、ルール、人数、時間など">${esc(b.desc)}</textarea>
+      <label class="f">コーチングポイント</label><textarea data-bk="points" placeholder="声かけ・見るポイント">${esc(b.points)}</textarea>
+      <div class="row" style="margin-top:10px;justify-content:flex-end">
+        <button class="btn sm" data-act="lib" style="margin-right:auto">💡 メニュー例</button>
+        <button class="btn sm" data-act="up" ${i===0?'disabled':''}>↑</button><button class="btn sm" data-act="down" ${i===p.blocks.length-1?'disabled':''}>↓</button>
+        <button class="btn sm" data-act="dup">複製</button><button class="btn sm danger" data-act="del">削除</button></div>
+    </div>`;
+  });
+  h+=`<button class="btn" id="addb" style="width:100%">＋ メニューを追加</button>
+    <h2>振り返り</h2><div class="card"><textarea data-k="review" placeholder="実施後の気づき、選手の反応、次回への課題">${esc(p.review)}</textarea></div>
+    <div class="row"><button class="btn pri grow" id="share">文章でコピー（LINE等に貼る）</button></div>
+    <div class="row" style="margin-top:8px"><button class="btn grow" id="dupPlan">この指導案を複製</button><button class="btn danger grow" id="delPlan">削除</button></div>
+    <div class="total"><span>合計時間</span><span id="tot">${totalMin(p)}分</span></div>`;
+  app.innerHTML=h;
+  app.querySelectorAll('[data-k]').forEach(el=>el.oninput=()=>{p[el.dataset.k]=el.value;if(el.dataset.k==='title')header(p.title||'指導案',true);save()});
+  app.querySelectorAll('[data-bk]').forEach(el=>el.oninput=()=>{const i=+el.closest('[data-b]').dataset.b;p.blocks[i][el.dataset.bk]=el.dataset.bk==='min'?(+el.value||0):el.value;document.getElementById('tot').textContent=totalMin(p)+'分';save()});
+  app.querySelectorAll('[data-board]').forEach(el=>el.onclick=()=>openBoard(+el.dataset.board));
+  app.querySelectorAll('[data-act]').forEach(el=>el.onclick=()=>{
+    const i=+el.closest('[data-b]').dataset.b,a=el.dataset.act,B=p.blocks;
+    if(a==='lib')return libDialog(i);
+    if(a==='up'&&i>0)[B[i-1],B[i]]=[B[i],B[i-1]];
+    if(a==='down'&&i<B.length-1)[B[i+1],B[i]]=[B[i],B[i+1]];
+    if(a==='dup'){const c=JSON.parse(JSON.stringify(B[i]));c.id=uid();c.name+='（コピー）';B.splice(i+1,0,c)}
+    if(a==='del')return confirmDlg(`「${B[i].name}」を削除しますか？`,()=>{B.splice(i,1);save();renderEdit(p.id)});
+    save();renderEdit(p.id);
+  });
+  app.querySelectorAll('#fmt button').forEach(el=>el.onclick=()=>{if(el.dataset.f!==p.format){switchFormat(p,el.dataset.f);save();renderEdit(p.id)}});
+  document.getElementById('addb').onclick=()=>{p.blocks.push(blk('トレーニング',15,'grid',20,20));save();renderEdit(p.id);setTimeout(()=>window.scrollTo(0,document.body.scrollHeight),50)};
+  document.getElementById('share').onclick=()=>copyText(planText(p),'指導案');
+  document.getElementById('dupPlan').onclick=()=>{const c=JSON.parse(JSON.stringify(p));c.id=uid();c.title=(c.title||'指導案')+'（コピー）';c.date=today();c.review='';S.plans.push(c);save();renderEdit(c.id);window.scrollTo(0,0);toast('複製しました')};
+  document.getElementById('delPlan').onclick=()=>confirmDlg('この指導案を削除しますか？',()=>{S.plans=S.plans.filter(x=>x.id!==p.id);save();location.hash='';renderList()});
+}
+function switchFormat(p,f){
+  const A=PITCH[p.format],B=PITCH[f],sx=B.W/A.W,sy=B.L/A.L;
+  for(const b of p.blocks){
+    if(b.diagram.area==='grid')continue;
+    for(const it of b.diagram.items){
+      if('x' in it){it.x*=sx;it.y*=sy}
+      if('x1' in it){it.x1*=sx;it.x2*=sx;it.y1*=sy;it.y2*=sy}
+    }
+  }
+  p.format=f;
+}
+function planText(p){
+  let t=`【指導案】${p.title||''}\n${p.date}／${PITCH[p.format].label}${p.grade?'／'+p.grade:''}${p.count?'／'+p.count:''}\n`;
+  if(p.theme)t+=`テーマ：${p.theme}\n`;if(p.aim)t+=`ねらい：${p.aim}\n`;
+  p.blocks.forEach(b=>{t+=`\n■ ${b.name}（${b.min}分）\n`;if(b.desc)t+=`${b.desc}\n`;if(b.points)t+=`▶ポイント：${b.points}\n`});
+  t+=`\n合計 ${totalMin(p)}分`;if(p.review)t+=`\n\n【振り返り】\n${p.review}`;
+  return t;
+}
+
+/* ---------- 作戦ボード ---------- */
+const TOOLS=[
+  ['move','移動','<svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 1v18M1 10h18M10 1l-3 3M10 1l3 3M10 19l-3-3M10 19l3-3M1 10l3-3M1 10l3 3M19 10l-3-3M19 10l-3 3" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>'],
+  ['a','味方','<svg width="20" height="20"><circle cx="10" cy="10" r="8" fill="#e53935" stroke="#fff" stroke-width="1.5"/></svg>'],
+  ['b','相手','<svg width="20" height="20"><circle cx="10" cy="10" r="8" fill="#1e63d6" stroke="#fff" stroke-width="1.5"/></svg>'],
+  ['gk','GK','<svg width="20" height="20"><circle cx="10" cy="10" r="8" fill="#f4c20d" stroke="#fff" stroke-width="1.5"/></svg>'],
+  ['cone','コーン','<svg width="20" height="20"><polygon points="10,2 17,17 3,17" fill="#ff8a1d" stroke="#fff" stroke-width="1.2"/></svg>'],
+  ['ball','ボール','<svg width="20" height="20"><circle cx="10" cy="10" r="6" fill="#fff" stroke="#222" stroke-width="1.2"/></svg>'],
+  ['mini','ミニゴール','<svg width="22" height="20"><rect x="2" y="7" width="18" height="7" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'],
+  ['pass','パス','<svg width="22" height="20"><path d="M2 15L18 5" stroke="currentColor" stroke-width="2"/><path d="M13 4l6 0.5-2.5 5.5z" fill="currentColor"/></svg>'],
+  ['run','ラン','<svg width="22" height="20"><path d="M2 15L18 5" stroke="currentColor" stroke-width="2" stroke-dasharray="3 2.5"/><path d="M13 4l6 0.5-2.5 5.5z" fill="currentColor"/></svg>'],
+  ['drib','ドリブル','<svg width="22" height="20"><path d="M2 15l3-4 2 3 3-4 2 3 3-4" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M14 4l6 0.5-2.5 5.5z" fill="currentColor"/></svg>'],
+  ['erase','消す','<svg width="20" height="20"><path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="2.2"/></svg>'],
+  ['undo','戻す','<svg width="20" height="20"><path d="M7 5L3 9l4 4M3 9h9a5 5 0 010 10H9" stroke="currentColor" stroke-width="1.8" fill="none"/></svg>'],
+  ['clear','全消去','<svg width="20" height="20"><path d="M5 6h10l-1 12H6zM3 6h14M8 3h4" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>'],
+];
+const BD={i:-1,tool:'a',hist:[],drag:null,temp:null,mid:'board'};
+const bsvg=document.getElementById('bsvg');
+function bdiag(){return cur.blocks[BD.i].diagram}
+function openBoard(i){
+  BD.i=i;BD.hist=[];BD.tool='a';
+  document.getElementById('board').classList.add('open');
+  document.getElementById('btitle').textContent=cur.blocks[i].name+'（'+PITCH[cur.format].label+'）';
+  renderOpts();renderTools();drawBoard();
+}
+document.getElementById('bdone').onclick=()=>{document.getElementById('board').classList.remove('open');save();renderEdit(cur.id)};
+function renderOpts(){
+  const d=bdiag();
+  let h=`<div class="seg"><button data-a="full" class="${d.area==='full'?'on':''}">全面</button><button data-a="half" class="${d.area==='half'?'on':''}">ハーフ</button><button data-a="grid" class="${d.area==='grid'?'on':''}">グリッド</button></div>`;
+  if(d.area==='grid')h+=`幅<input type="number" inputmode="numeric" id="gw" value="${d.gw}">×奥行<input type="number" inputmode="numeric" id="gh" value="${d.gh}">m`;
+  if(d.area==='full'){
+    h+=`<select id="form"><option value="">配置プリセット</option>${FORMS[cur.format].map(f=>`<option value="${f}">${f}（味方のみ）</option><option value="${f}|opp">${f}（両チーム）</option>`).join('')}</select>`;
+  }
+  const el=document.getElementById('bopts');el.innerHTML=h;
+  el.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{pushHist();d.area=b.dataset.a;renderOpts();drawBoard()});
+  const gw=document.getElementById('gw'),gh=document.getElementById('gh');
+  if(gw){const f=()=>{d.gw=Math.min(120,Math.max(5,+gw.value||20));d.gh=Math.min(120,Math.max(5,+gh.value||20));drawBoard()};gw.onchange=f;gh.onchange=f}
+  const fm=document.getElementById('form');
+  if(fm)fm.onchange=()=>{if(!fm.value)return;const [f,o]=fm.value.split('|');pushHist();
+    d.items=d.items.filter(it=>!['a','b','gk','ball'].includes(it.t)).concat(formationItems(cur.format,f,!!o));fm.value='';drawBoard()};
+}
+function renderTools(){
+  const el=document.getElementById('btools');
+  el.innerHTML=TOOLS.map(([k,l,ic])=>`<button class="tool ${BD.tool===k?'on':''}" data-t="${k}"><span class="ic">${ic}</span>${l}</button>`).join('');
+  el.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{
+    const t=b.dataset.t,d=bdiag();
+    if(t==='undo'){if(BD.hist.length){d.items=BD.hist.pop();drawBoard()}else toast('これ以上戻せません');return}
+    if(t==='clear'){if(d.items.length){pushHist();d.items=[];drawBoard()}return}
+    BD.tool=t;renderTools();
+  });
+}
+function pushHist(){BD.hist.push(JSON.parse(JSON.stringify(bdiag().items)));if(BD.hist.length>60)BD.hist.shift()}
+function drawBoard(){
+  const {s,vb,r}=svgContent(cur.format,bdiag(),BD.mid,BD.temp);
+  bsvg.setAttribute('viewBox',vb);bsvg.innerHTML=s;BD.r=r;
+}
+function pt(e){const p=bsvg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const q=p.matrixTransform(bsvg.getScreenCTM().inverse());return{x:+q.x.toFixed(2),y:+q.y.toFixed(2)}}
+function nextNum(t){const its=bdiag().items.filter(i=>i.t===t&&typeof i.n==='number');let n=1;while(its.some(i=>i.n===n))n++;return n}
+bsvg.addEventListener('pointerdown',e=>{
+  e.preventDefault();const p=pt(e),d=bdiag(),g=e.target.closest('[data-i]'),idx=g?+g.dataset.i:-1,t=BD.tool;
+  if(t==='erase'){if(idx>=0){pushHist();d.items.splice(idx,1);drawBoard()}return}
+  if(isArrow(t)){BD.temp={t,x1:p.x,y1:p.y,x2:p.x,y2:p.y};bsvg.setPointerCapture(e.pointerId);drawBoard();return}
+  if(idx>=0){pushHist();BD.drag={idx,last:p};bsvg.setPointerCapture(e.pointerId);return}
+  if(t==='move')return;
+  pushHist();
+  const it={t,x:p.x,y:p.y};
+  if(t==='a'||t==='b')it.n=nextNum(t);
+  if(t==='gk')it.n='GK';
+  d.items.push(it);BD.drag={idx:d.items.length-1,last:p};bsvg.setPointerCapture(e.pointerId);drawBoard();
+});
+bsvg.addEventListener('pointermove',e=>{
+  if(!BD.drag&&!BD.temp)return;const p=pt(e);
+  if(BD.temp){BD.temp.x2=p.x;BD.temp.y2=p.y;drawBoard();return}
+  const it=bdiag().items[BD.drag.idx],dx=p.x-BD.drag.last.x,dy=p.y-BD.drag.last.y;BD.drag.last=p;
+  if('x' in it){it.x+=dx;it.y+=dy}else{it.x1+=dx;it.x2+=dx;it.y1+=dy;it.y2+=dy}
+  drawBoard();
+});
+function endPtr(){
+  if(BD.temp){const a=BD.temp;BD.temp=null;if(Math.hypot(a.x2-a.x1,a.y2-a.y1)>BD.r*1.5){pushHist();bdiag().items.push(a)}drawBoard()}
+  BD.drag=null;save();
+}
+bsvg.addEventListener('pointerup',endPtr);bsvg.addEventListener('pointercancel',endPtr);
+window.addEventListener('resize',()=>{if(BD.i>=0&&document.getElementById('board').classList.contains('open'))drawBoard()});
+
+/* ---------- ダイアログ類 ---------- */
+function modal(html){const m=document.createElement('div');m.className='modal';m.innerHTML=`<div class="box">${html}</div>`;m.onclick=e=>{if(e.target===m)m.remove()};document.body.appendChild(m);return m}
+function confirmDlg(msg,ok){const m=modal(`<p>${esc(msg)}</p><div class="row" style="justify-content:flex-end"><button class="btn" data-c>キャンセル</button><button class="btn pri" data-o style="background:#c62828;border-color:#c62828">削除する</button></div>`);
+  m.querySelector('[data-c]').onclick=()=>m.remove();m.querySelector('[data-o]').onclick=()=>{m.remove();ok()}}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),1800)}
+async function copyText(text,what){
+  try{await navigator.clipboard.writeText(text);toast(what+'をコピーしました');}
+  catch(e){const m=modal(`<p>${esc(what)}を長押し（またはすべて選択）してコピーしてください。</p><textarea style="min-height:200px" readonly>${esc(text)}</textarea><div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn" data-c>閉じる</button></div>`);
+    const ta=m.querySelector('textarea');ta.focus();ta.select();m.querySelector('[data-c]').onclick=()=>m.remove();}
+}
+function importDialog(){
+  const m=modal(`<p>バックアップの文字列を貼り付けてください。今ある指導案に追加されます（同じものは上書き）。</p><textarea style="min-height:160px" placeholder='{"plans":[...]}'></textarea><div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn" data-c>キャンセル</button><button class="btn pri" data-o>読み込む</button></div>`);
+  m.querySelector('[data-c]').onclick=()=>m.remove();
+  m.querySelector('[data-o]').onclick=()=>{
+    try{const d=JSON.parse(m.querySelector('textarea').value);if(!Array.isArray(d.plans))throw 0;
+      for(const p of d.plans){if(!p.id||!p.blocks||!PITCH[p.format])continue;S.plans=S.plans.filter(x=>x.id!==p.id);S.plans.push(p)}
+      save();m.remove();renderList();toast(d.plans.length+'件読み込みました');}
+    catch(e){toast('読み込めませんでした。文字列を確認してください')}
+  };
+}
+
+/* ---------- 起動 ---------- */
+load();
+window.addEventListener('hashchange',()=>{if(!location.hash){document.getElementById('board').classList.remove('open');renderList()}});
+renderList();
+if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+</script>
+</body>
+</html>
