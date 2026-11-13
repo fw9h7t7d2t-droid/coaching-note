@@ -90,6 +90,12 @@ h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--li
 .dot.on{background:var(--lime);box-shadow:0 0 10px var(--lime)}
 .codebox{font-family:Oswald,monospace;font-size:26px;letter-spacing:.12em;text-align:center;color:var(--lime);background:rgba(0,0,0,.3);border:1px dashed rgba(198,255,61,.4);border-radius:12px;padding:12px;margin:10px 0}
 #cloudCard .meta{line-height:1.6;margin:0 0 10px}
+.badge.p{background:rgba(255,107,107,.16);color:#ff8a8a}
+.plan-item.p::before{background:#ff6b6b}
+#pdfView{position:fixed;inset:0;z-index:25;background:#07110c;display:none;flex-direction:column}
+#pdfView.open{display:flex}
+#pvPages{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:8px}
+#pvPages canvas{display:block;margin:0 auto 10px;border-radius:6px;background:#fff;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 .empty{color:var(--sub);text-align:center;padding:26px 10px;line-height:1.8}
 /* board */
 #board{position:fixed;inset:0;z-index:20;background:radial-gradient(700px 500px at 50% 0%,#14402a,#07140d 70%);display:none;flex-direction:column}
@@ -123,6 +129,9 @@ h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--li
 </header>
 <main id="app"></main>
 
+<div id="pdfView"><div class="b-top"><button id="pvClose" style="background:rgba(255,255,255,.1);color:#fff">‹ 戻る</button><div class="t" id="pvTitle"></div><button id="pvShare">共有・保存</button></div>
+  <div id="pvPages"></div>
+  <div style="padding:8px 12px calc(env(safe-area-inset-bottom) + 10px);text-align:center"><button class="btn sm danger" id="pvDel">このPDFをチームから削除</button></div></div>
 <div id="board">
   <div class="b-top"><div class="t" id="btitle"></div><button id="bdone">完了</button></div>
   <div class="b-opts" id="bopts"></div>
@@ -180,10 +189,14 @@ async function cloudInit(){
   }catch(e){cloud.err='クラウドに接続できませんでした（電波を確認してください）';console.log(e)}
   renderCloudCard();
 }
-function cloudDetach(){cloud.unsub.forEach(f=>f());cloud.unsub=[];cloud.synced=false}
+function cloudDetach(){cloud.unsub.forEach(f=>f());cloud.unsub=[];cloud.synced=false;if(typeof pdfState!=='undefined'){pdfState.list=[];renderPdfSec()}}
 function cloudAttach(){
   cloudDetach();
   cloud.unsub.push(teamRef().onSnapshot(d=>{if(d.exists){cloud.teamName=d.data().name||'';renderCloudCard()}},e=>{cloud.err='チームのデータを読めませんでした';renderCloudCard()}));
+  cloud.unsub.push(pdfsRef().onSnapshot(q=>{
+    pdfState.list=q.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.createdAt||0)-(a.createdAt||0));
+    renderPdfSec();
+  },e=>{}));
   cloud.unsub.push(plansRef().onSnapshot(q=>{
     const list=[];
     q.forEach(d=>{try{const p=JSON.parse(d.data().json);if(p&&p.id&&p.blocks)list.push(p)}catch(_){}});
@@ -217,6 +230,7 @@ async function cloudJoin(raw){
   await pushLocalMissing();cloudAttach();
 }
 function renderCloudCard(){
+  if(typeof pdfState!=='undefined')renderPdfSec();
   const el=document.getElementById('cloudCard');if(!el)return;
   const head=(on,extra='')=>`<div class="ttl2"><span class="dot ${on?'on':''}"></span>クラウド保存・チーム共有${extra}</div>`;
   if(cloud.err&&!cloud.ready){el.innerHTML=head(false)+`<p class="meta" style="color:#ff7a7a">${esc(cloud.err)}</p><button class="btn sm" id="cRetry">もう一度つなぐ</button>`;
@@ -556,7 +570,8 @@ function renderList(){
       <b>${esc(p.title||'（無題の指導案）')}</b>
       <span class="meta">${p.theme?'テーマ：'+esc(p.theme)+'　':''}${totalMin(p)}分・${p.blocks.length}メニュー</span></button>`;
   }
-  h+=`<h2>クラウド</h2><div class="card" id="cloudCard"></div>
+  h+=`<h2>PDF指導案（チーム共有）</h2><div id="pdfSec"></div>
+  <h2>クラウド</h2><div class="card" id="cloudCard"></div>
   <h2>データ</h2><div class="card"><div class="meta" style="margin-bottom:10px;line-height:1.6">チーム共有をしていないときは、指導案はこの端末のブラウザだけに保存されます。クラウドを使わずに移すときは、バックアップの文字列をコピーして、移した先で読み込んでください。${storageOK?'':'<br><b style="color:#c62828">この環境では保存が使えないため、ページを閉じると消えます。</b>'}</div>
     <div class="row"><button class="btn sm" id="exp">バックアップをコピー</button><button class="btn sm" id="imp">バックアップを読み込む</button></div></div>`;
   app.innerHTML=h;
@@ -566,7 +581,7 @@ function renderList(){
   document.getElementById('propose').onclick=proposeDialog;
   document.getElementById('exp').onclick=()=>copyText(JSON.stringify(S),'バックアップ');
   document.getElementById('imp').onclick=importDialog;
-  renderCloudCard();
+  renderCloudCard();renderPdfSec();
   window.scrollTo(0,0);
 }
 function openPlan(id){location.hash='plan';renderEdit(id)}
@@ -747,6 +762,104 @@ function importDialog(){
     catch(e){toast('読み込めませんでした。文字列を確認してください')}
   };
 }
+
+/* ---------- PDF指導案の共有（Firestoreに分割して保存） ---------- */
+const pdfState={list:[],cache:{}};
+const PDF_MAX=10*1024*1024, PDF_CH=800000;
+const pdfsRef=()=>teamRef().collection('pdfs');
+const fmtSize=b=>b>=1048576?(b/1048576).toFixed(1)+'MB':Math.max(1,Math.round(b/1024))+'KB';
+function renderPdfSec(){
+  const el=document.getElementById('pdfSec');if(!el)return;
+  if(!cloud.team){el.innerHTML=`<div class="card"><p class="meta" style="margin:0;line-height:1.6">お手持ちの指導案PDFを、コーチ同士で共有できます。下の「クラウド」でチームを作るか、チームコードで参加してください。</p></div>`;return}
+  let h=`<button class="btn ghost" id="pdfAdd" style="border-color:rgba(255,107,107,.6);color:#ff8a8a;background:rgba(255,107,107,.06)">📄 PDFの指導案を載せる</button>`;
+  if(!pdfState.list.length)h+=`<div class="empty" style="padding:6px 10px 14px">まだPDFはありません。</div>`;
+  for(const p of pdfState.list){
+    h+=`<button class="plan-item p" data-pdf="${esc(p.id)}"><span class="badge p">PDF</span><span class="meta">　${esc(p.date||'')}　${fmtSize(p.size||0)}</span>
+      <b>${esc(p.title||p.name||'指導案PDF')}</b>${p.memo?`<span class="meta">${esc(p.memo)}</span>`:''}</button>`;
+  }
+  el.innerHTML=h;
+  document.getElementById('pdfAdd').onclick=pdfUploadDialog;
+  el.querySelectorAll('[data-pdf]').forEach(b=>b.onclick=()=>openPdf(pdfState.list.find(x=>x.id===b.dataset.pdf)));
+}
+function fileToB64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(',')[1]||'');r.onerror=rej;r.readAsDataURL(file)})}
+function pdfUploadDialog(){
+  let file=null;
+  const m=modal(`<div class="ttl">📄 PDFの指導案を載せる</div>
+    <p class="meta" style="margin:6px 0 4px">載せたPDFは、同じチームのコーチ全員が見られます（10MBまで）。</p>
+    <label class="btn" style="display:block;text-align:center;margin-top:10px">PDFを選ぶ<input type="file" id="pf" accept="application/pdf,.pdf" style="display:none"></label>
+    <div class="meta" id="pfName" style="margin-top:6px;text-align:center">選ばれていません</div>
+    <label class="f">タイトル</label><input id="pt2" placeholder="例：U-12 ビルドアップ">
+    <label class="f">日付</label><input type="date" id="pd2" value="${today()}">
+    <label class="f">メモ（任意）</label><input id="pm2" placeholder="例：雨の日用、30人用 など">
+    <div class="meta" id="pProg" style="margin-top:10px;min-height:1.4em"></div>
+    <div class="row" style="justify-content:flex-end;margin-top:6px"><button class="btn" data-c>キャンセル</button><button class="btn pri" data-o>載せる</button></div>`);
+  const q=s=>m.querySelector(s);
+  q('#pf').onchange=e=>{file=e.target.files[0]||null;if(!file)return;
+    q('#pfName').textContent=file.name+'（'+fmtSize(file.size)+'）';
+    if(!q('#pt2').value)q('#pt2').value=file.name.replace(/\.pdf$/i,'')};
+  q('[data-c]').onclick=()=>m.remove();
+  q('[data-o]').onclick=async e=>{
+    if(!file)return toast('PDFを選んでください');
+    if(file.size>PDF_MAX)return toast('10MBより大きいPDFは載せられません');
+    if(!/pdf$/i.test(file.type)&&!/\.pdf$/i.test(file.name))return toast('PDFのファイルを選んでください');
+    e.target.disabled=true;q('[data-c]').disabled=true;
+    try{
+      q('#pProg').textContent='準備中…';
+      const b64=await fileToB64(file),n=Math.ceil(b64.length/PDF_CH),id=Date.now().toString(36)+uid(),ref=pdfsRef().doc(id);
+      for(let i=0;i<n;i++){
+        await ref.collection('chunks').doc(String(i).padStart(3,'0')).set({d:b64.slice(i*PDF_CH,(i+1)*PDF_CH)});
+        q('#pProg').textContent=`アップロード中… ${Math.round((i+1)/n*100)}%`;
+      }
+      await ref.set({title:q('#pt2').value.trim()||file.name,date:q('#pd2').value,memo:q('#pm2').value.trim(),name:file.name,size:file.size,chunks:n,createdAt:Date.now()});
+      m.remove();toast('PDFを載せました。チームのコーチ全員が見られます');
+    }catch(err){cloudFail(err,'PDFを載せることが');e.target.disabled=false;q('[data-c]').disabled=false;q('#pProg').textContent=''}
+  };
+}
+async function getPdfBytes(p){
+  if(pdfState.cache[p.id])return pdfState.cache[p.id];
+  const q=await pdfsRef().doc(p.id).collection('chunks').get();
+  const parts=q.docs.slice().sort((a,b)=>a.id.localeCompare(b.id)).map(d=>d.data().d||'');
+  if(p.chunks&&parts.length<p.chunks)throw new Error('incomplete');
+  const bin=atob(parts.join('')),u=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+  return pdfState.cache[p.id]=u;
+}
+let pdfjsReady=null;
+function loadPdfJs(){
+  if(!pdfjsReady)pdfjsReady=loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js').then(()=>{
+    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'});
+  return pdfjsReady;
+}
+async function openPdf(p){
+  if(!p)return;
+  const v=document.getElementById('pdfView'),pages=document.getElementById('pvPages');
+  document.getElementById('pvTitle').textContent=p.title||p.name;
+  pages.innerHTML='<div class="empty">読み込み中…</div>';v.classList.add('open');
+  let bytes;
+  const file=()=>new File([bytes],p.name||'指導案.pdf',{type:'application/pdf'});
+  document.getElementById('pvShare').onclick=async()=>{
+    if(!bytes)return;
+    try{const f=file();if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:p.title||p.name});return}}catch(e){if(e.name==='AbortError')return}
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));a.download=p.name||'指導案.pdf';document.body.appendChild(a);a.click();a.remove();
+  };
+  document.getElementById('pvDel').onclick=()=>confirmDlg(`「${p.title||p.name}」をチームから削除しますか？（全員の画面から消えます）`,async()=>{
+    try{const q=await pdfsRef().doc(p.id).collection('chunks').get();await Promise.all(q.docs.map(d=>d.ref.delete()));await pdfsRef().doc(p.id).delete();
+      v.classList.remove('open');toast('削除しました')}catch(e){cloudFail(e,'削除')}});
+  try{bytes=await getPdfBytes(p)}catch(e){pages.innerHTML='<div class="empty">PDFを読み込めませんでした。電波を確認してください。</div>';return}
+  try{
+    await loadPdfJs();
+    const doc=await pdfjsLib.getDocument({data:bytes.slice()}).promise;
+    pages.innerHTML='';
+    const w=Math.min(pages.clientWidth-16,900),dpr=Math.min(window.devicePixelRatio||1,2);
+    for(let i=1;i<=doc.numPages;i++){
+      if(!v.classList.contains('open'))return;
+      const pg=await doc.getPage(i),base=pg.getViewport({scale:1}),vp=pg.getViewport({scale:w/base.width*dpr});
+      const c=document.createElement('canvas');c.width=vp.width;c.height=vp.height;c.style.width=w+'px';pages.appendChild(c);
+      await pg.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
+    }
+  }catch(e){console.log(e);pages.innerHTML='<div class="empty">この画面では表示できませんでした。右上の「共有・保存」から開いてください。</div>'}
+}
+document.getElementById('pvClose').onclick=()=>document.getElementById('pdfView').classList.remove('open');
 
 /* ---------- 起動 ---------- */
 load();
